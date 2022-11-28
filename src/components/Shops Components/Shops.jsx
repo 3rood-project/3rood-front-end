@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 export const Shops = () => {
   return (
     <>
-      <MDBCol className="mb-4 col-12 col-md-3 ms-1">
+      <MDBCol md="6" lg="3" className="mb-4 ps-2">
         <MDBCard>
           <MDBRipple
             rippleColor="light"
@@ -34,7 +34,7 @@ export const Shops = () => {
             </Link>
           </MDBRipple>
           <MDBCardBody className="text-center">
-            <Link className="text-reset">
+            <Link to="/shopProfile" className="text-reset">
               <h4
                 className="card-title mb-3 text-capitalize"
                 style={{ color: " #ed2647", fontWeight: 700 }}
@@ -43,9 +43,11 @@ export const Shops = () => {
               </h4>
             </Link>
             <p>Category</p>{" "}
-            <MDBBtn className="mx-2" color="dark">
-              Shop now
-            </MDBBtn>
+            <Link to="/shopProfile">
+              <MDBBtn className="mx-2" color="dark">
+                Shop now
+              </MDBBtn>
+            </Link>
           </MDBCardBody>
         </MDBCard>
       </MDBCol>

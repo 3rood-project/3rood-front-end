@@ -11,6 +11,9 @@ import Register from "./components/pages/Register";
 import { Shops } from "./components/pages/Shops";
 import ShopLogin from "./components/pages/ShopLogin";
 import JoinUs from "./components/pages/JoinUs";
+import { ShopProfile } from "./components/pages/ShopProfile";
+import UserProfile from "./components/pages/UserProfile";
+import OrderDetails from "./components/pages/OrderDetails";
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/shops" element={<Shops />} />
+        <Route path="/shopProfile" element={<ShopProfile />} />
+        <Route path="/userProfile" element={<UserProfile />} />
+        <Route path="/orderDetails" element={<OrderDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />

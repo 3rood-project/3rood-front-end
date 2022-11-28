@@ -91,7 +91,7 @@ export default function NavBar() {
                 </span>
               </MDBNavbarLink>
             </MDBNavbarItem>
-            {true ? (
+            {false ? (
               <MDBDropdown>
                 <MDBDropdownToggle className="ms-3 me-lg-0 align-self-center px-3 bg-dark">
                   Login
@@ -121,7 +121,9 @@ export default function NavBar() {
                       <Link className="text-dark">Action</Link>
                     </MDBDropdownItem>
                     <MDBDropdownItem className="py-2 px-3 ">
-                      <Link className="text-dark">View Profile</Link>
+                      <Link to="/userProfile" className="text-dark">
+                        View Profile
+                      </Link>
                     </MDBDropdownItem>
                     <MDBDropdownItem
                       className="py-2 px-3 text-danger"
