@@ -59,7 +59,7 @@ export const SideBar = () => {
           </div>
         </MDBCol>
         <MDBCol className="col-8 col-md-10 mt-5 px-4 pt-4">
-          <MDBRow className="g-0 justify-content-evenly align-items-center">
+          <MDBRow className="g-0 justify-content-evenly align-items-center g-2">
             <Shops />
             <Shops />
             <Shops />
