@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   MDBCol,
   MDBContainer,
@@ -11,8 +11,13 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import OrderTable from "../User Profle Components/OrderTable";
+import { Link } from "react-router-dom";
+import ChangePass from "../User Profle Components/ChangePass";
 
 export default function UserProfile() {
+  const [staticModal, setStaticModal] = useState(false);
+
+  const toggleShow = () => setStaticModal(!staticModal);
   return (
     <section style={{ backgroundColor: "#eee" }}>
       <MDBContainer className="py-5">
@@ -31,10 +36,27 @@ export default function UserProfile() {
                   Osama Dasooky
                 </p>
                 <div className="d-flex justify-content-center mb-2">
-                  <MDBBtn outline color="dark" className="ms-1">
-                    <MDBIcon fas icon="edit" />
-                    edit Profile
-                  </MDBBtn>
+                  <Link to="edit">
+                    <MDBBtn outline color="dark" className="ms-1">
+                      <MDBIcon fas icon="edit" />
+                      edit Profile
+                    </MDBBtn>
+                  </Link>
+                  <Link to="changePass">
+                    <MDBBtn
+                      outline
+                      color="dark"
+                      className="ms-1"
+                      onClick={toggleShow}
+                    >
+                      <MDBIcon fas icon="cog" /> Change Password
+                    </MDBBtn>
+                  </Link>
+                  <ChangePass
+                    setStaticModal={setStaticModal}
+                    staticModal={staticModal}
+                    toggleShow={toggleShow}
+                  />
                 </div>
               </MDBCardBody>
             </MDBCard>
