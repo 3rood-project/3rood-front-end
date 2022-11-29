@@ -10,7 +10,6 @@ import {
   MDBNavbarLink,
   MDBCollapse,
   MDBBadge,
-  MDBBtn,
   MDBDropdown,
   MDBDropdownToggle,
   MDBDropdownMenu,
@@ -24,7 +23,7 @@ export default function NavBar() {
   const [showBasic, setShowBasic] = useState(false);
 
   return (
-    <MDBNavbar expand="lg" light bgColor="light">
+    <MDBNavbar expand="lg" light sticky bgColor="light">
       <MDBContainer fluid>
         <MDBNavbarBrand>
           <img src={logo} height="30" alt="" loading="lazy" />

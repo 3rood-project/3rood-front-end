@@ -14,6 +14,7 @@ import JoinUs from "./components/pages/JoinUs";
 import { ShopProfile } from "./components/pages/ShopProfile";
 import UserProfile from "./components/pages/UserProfile";
 import OrderDetails from "./components/pages/OrderDetails";
+import EditProfile from "./components/pages/EditProfile";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/shopProfile" element={<ShopProfile />} />
         <Route path="/userProfile" element={<UserProfile />} />
         <Route path="/orderDetails" element={<OrderDetails />} />
+        <Route path="/userProfile/edit" element={<EditProfile />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />

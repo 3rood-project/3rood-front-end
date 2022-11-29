@@ -7,10 +7,8 @@ import {
   MDBCard,
   MDBCardBody,
   MDBInput,
-  MDBIcon,
 } from "mdb-react-ui-kit";
 import logo from "../asset/BrandFiles/3rood-low-resolution-logo-color-on-transparent-background.png";
-import { Link } from "react-router-dom";
 
 function ShopLogin() {
   return (
