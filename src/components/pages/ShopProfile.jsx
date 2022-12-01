@@ -7,7 +7,6 @@ import {
   MDBCardText,
   MDBCardBody,
   MDBCardImage,
-  MDBBtn,
   MDBTypography,
 } from "mdb-react-ui-kit";
 import ShopProduct from "../ShopProfile Components/ShopProduct";
