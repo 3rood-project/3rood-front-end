@@ -80,16 +80,17 @@ export default function NavBar() {
             className="justify-content-end align-items-center flex-row "
             style={{ flexBasis: "20%" }}
           >
-            <MDBNavbarItem>
+            <Link to="/cart">
               <MDBNavbarLink>
                 <MDBBadge pill color="danger">
                   0
                 </MDBBadge>
                 <span>
-                  <MDBIcon fas icon="shopping-cart"></MDBIcon>
+                  <MDBIcon fas icon="shopping-cart" />
                 </span>
               </MDBNavbarLink>
-            </MDBNavbarItem>
+            </Link>
+
             {false ? (
               <MDBDropdown>
                 <MDBDropdownToggle className="ms-3 me-lg-0 align-self-center px-3 bg-dark">

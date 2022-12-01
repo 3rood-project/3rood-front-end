@@ -8,13 +8,9 @@ import {
   MDBModalBody,
   MDBModalFooter,
 } from "mdb-react-ui-kit";
-import ChangePassComp from "./ChangePassComp";
+import AddOfferComp from "./AddOfferComp";
 
-export default function ChangePass({
-  setStaticModal,
-  staticModal,
-  toggleShow,
-}) {
+export default function AddOffer({ setStaticModal, staticModal, toggleShow }) {
   return (
     <>
       <MDBModal
@@ -26,7 +22,7 @@ export default function ChangePass({
         <MDBModalDialog>
           <MDBModalContent>
             <MDBModalHeader>
-              <MDBModalTitle>Change Password</MDBModalTitle>
+              <MDBModalTitle>ADD Offer</MDBModalTitle>
               <MDBBtn
                 className="btn-close"
                 color="none"
@@ -34,13 +30,13 @@ export default function ChangePass({
               ></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-              <ChangePassComp />
+              <AddOfferComp />
             </MDBModalBody>
             <MDBModalFooter>
               <MDBBtn color="danger" onClick={toggleShow}>
-                Close
+                Cancel
               </MDBBtn>
-              <MDBBtn color="dark">Save Change</MDBBtn>
+              <MDBBtn color="dark">add offer</MDBBtn>
             </MDBModalFooter>
           </MDBModalContent>
         </MDBModalDialog>

@@ -124,7 +124,9 @@ export default function UserProfile() {
           </MDBCol>
         </MDBRow>
         <h3>Order History</h3>
-        <OrderTable />
+        <MDBRow>
+          <OrderTable />
+        </MDBRow>
       </MDBContainer>
     </section>
   );
