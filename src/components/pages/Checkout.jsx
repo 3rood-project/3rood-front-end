@@ -64,6 +64,7 @@ export function Checkout() {
                 id="flexRadioDefault2"
                 label="Cash on Delivery"
                 required
+                c
               />
             </div>
           </MDBCol>
