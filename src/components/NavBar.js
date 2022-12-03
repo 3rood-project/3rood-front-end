@@ -15,13 +15,16 @@ import {
   MDBDropdownMenu,
   MDBDropdownItem,
 } from "mdb-react-ui-kit";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "./asset/BrandFiles/3rood-low-resolution-logo-color-on-transparent-background.png";
 import man from "./asset/man.png";
-
+import { useSignOut } from "react-auth-kit";
+import { useIsAuthenticated } from "react-auth-kit";
 export default function NavBar() {
   const [showBasic, setShowBasic] = useState(false);
-
+  const signOut = useSignOut();
+  const isAuthenticated = useIsAuthenticated();
+  const navigate = useNavigate();
   return (
     <MDBNavbar expand="lg" light sticky bgColor="light">
       <MDBContainer fluid>
@@ -91,7 +94,7 @@ export default function NavBar() {
               </MDBNavbarLink>
             </Link>
 
-            {false ? (
+            {!isAuthenticated() ? (
               <MDBDropdown>
                 <MDBDropdownToggle className="ms-3 me-lg-0 align-self-center px-3 bg-dark">
                   Login
@@ -118,7 +121,9 @@ export default function NavBar() {
                   </MDBDropdownToggle>
                   <MDBDropdownMenu>
                     <MDBDropdownItem className="py-2 px-3 ">
-                      <Link className="text-dark">Action</Link>
+                      <Link to="/userProfile/edit" className="text-dark">
+                        Edit profile
+                      </Link>
                     </MDBDropdownItem>
                     <MDBDropdownItem className="py-2 px-3 ">
                       <Link to="/userProfile" className="text-dark">
@@ -128,6 +133,10 @@ export default function NavBar() {
                     <MDBDropdownItem
                       className="py-2 px-3 text-danger"
                       style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        signOut();
+                        navigate("/", { replace: true });
+                      }}
                     >
                       Logout
                       <MDBIcon fas icon="sign-out-alt" />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MDBCol,
   MDBContainer,
@@ -9,15 +9,58 @@ import {
   MDBCardImage,
   MDBBtn,
   MDBIcon,
+  MDBSpinner,
 } from "mdb-react-ui-kit";
 import OrderTable from "../User Profle Components/OrderTable";
 import { Link } from "react-router-dom";
 import ChangePass from "../User Profle Components/ChangePass";
+import { useAuthUser } from "react-auth-kit";
+import axios from "axios";
+import { saveData } from "../../redusers/UserData";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function UserProfile() {
   const [staticModal, setStaticModal] = useState(false);
+  const auth = useAuthUser();
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.userData.userData);
 
   const toggleShow = () => setStaticModal(!staticModal);
+  const data = new FormData();
+  const config = {
+    method: "get",
+    url: "http://127.0.0.1:8000/api/profile",
+    headers: {
+      Accept: "application/vnd.api+json",
+      "Content-Type": "application/vnd.api+json",
+      Authorization: `Bearer ${auth().token}`,
+    },
+    data: data,
+  };
+  const fetchUserData = () => {
+    axios(config)
+      .then(function (res) {
+        dispatch(saveData(res.data.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+  if (userData == "") {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "50vh" }}
+      >
+        <MDBSpinner role="status " style={{ width: "3rem", height: "3rem" }}>
+          <span className="visually-hidden">Loading...</span>
+        </MDBSpinner>
+      </div>
+    );
+  }
   return (
     <section style={{ backgroundColor: "#eee" }}>
       <MDBContainer className="py-5">
@@ -33,7 +76,7 @@ export default function UserProfile() {
                   fluid
                 />
                 <p className="h4 mb-3" style={{ color: " #ed2647" }}>
-                  Osama Dasooky
+                  {userData.userInfo.firstName} {userData.userInfo.lastName}
                 </p>
                 <div className="d-flex justify-content-center mb-2">
                   <Link to="edit">
@@ -69,7 +112,9 @@ export default function UserProfile() {
                     <MDBCardText>First Name</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">Johnatan</MDBCardText>
+                    <MDBCardText className="text-muted">
+                      {userData.userInfo.firstName}
+                    </MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -78,7 +123,9 @@ export default function UserProfile() {
                     <MDBCardText>Last Name</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">Smith</MDBCardText>
+                    <MDBCardText className="text-muted">
+                      {userData.userInfo.lastName}
+                    </MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -88,7 +135,7 @@ export default function UserProfile() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      example@example.com
+                      {userData.userInfo.userEmail}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -98,7 +145,9 @@ export default function UserProfile() {
                     <MDBCardText>Phone</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">0786238190</MDBCardText>
+                    <MDBCardText className="text-muted">
+                      {userData.userInfo.phoneNumber}
+                    </MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -107,16 +156,9 @@ export default function UserProfile() {
                     <MDBCardText>Gender</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">male</MDBCardText>
-                  </MDBCol>
-                </MDBRow>
-                <hr />
-                <MDBRow>
-                  <MDBCol sm="3">
-                    <MDBCardText>Birthday</MDBCardText>
-                  </MDBCol>
-                  <MDBCol sm="9">
-                    <MDBCardText className="text-muted">1-6-1999</MDBCardText>
+                    <MDBCardText className="text-muted">
+                      {userData.userInfo.gender}
+                    </MDBCardText>
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>

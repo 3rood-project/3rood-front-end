@@ -1,5 +1,7 @@
 import NavBar from "./components/NavBar";
 import { Route, Routes } from "react-router-dom";
+import { AuthProvider, RequireAuth } from "react-auth-kit";
+
 import { Home } from "./components/pages/Home";
 import { About } from "./components/pages/About";
 import { Contact } from "./components/pages/Contact";
@@ -20,26 +22,51 @@ import { ShopOwner } from "./components/pages/ShopOwner";
 function App() {
   return (
     <>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/shops" element={<Shops />} />
-        <Route path="/shopProfile" element={<ShopProfile />} />
-        <Route path="/userProfile" element={<UserProfile />} />
-        <Route path="/orderDetails" element={<OrderDetails />} />
-        <Route path="/userProfile/edit" element={<EditProfile />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/shopLogin" element={<ShopLogin />} />
-        <Route path="/joinUs" element={<JoinUs />} />
-        <Route path="/register" element={<Register />} />
-        {/* //-----------------------/ */}
-        <Route path="/shopOwner" element={<ShopOwner />} />
-      </Routes>
-      <Footer />
+      <AuthProvider authType={"cookie"} authName={"_auth"}>
+        <NavBar />
+        <Routes>
+          {/* ----------public routes----------- */}
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/shopLogin" element={<ShopLogin />} />
+          <Route path="/joinUs" element={<JoinUs />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/shops" element={<Shops />} />
+          <Route path="/shopProfile" element={<ShopProfile />} />
+          {/* ----------user routes-------------- */}
+          <Route
+            path="/checkout"
+            element={
+              <RequireAuth loginPath={"/login"}>
+                <Checkout />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/orderDetails/:id"
+            element={
+              <RequireAuth loginPath={"/login"}>
+                <OrderDetails />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/userProfile"
+            element={
+              <RequireAuth loginPath={"/login"}>
+                <UserProfile />
+              </RequireAuth>
+            }
+          />
+          <Route path="/userProfile/edit" element={<EditProfile />} />
+          {/* ----------shop routes-------------/ */}
+          <Route path="/shopOwner" element={<ShopOwner />} />
+        </Routes>
+        <Footer />
+      </AuthProvider>
     </>
   );
 }
