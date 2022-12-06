@@ -16,17 +16,19 @@ import { Link } from "react-router-dom";
 import ChangePass from "../User Profle Components/ChangePass";
 import { useAuthUser } from "react-auth-kit";
 import axios from "axios";
-import { saveData } from "../../redusers/UserData";
+import { saveData, saveOrder } from "../../redusers/UserData";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function UserProfile() {
   const [staticModal, setStaticModal] = useState(false);
   const auth = useAuthUser();
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.userData.userData);
 
+  const userData = useSelector((state) => state.userData.userData);
+  const userOrder = useSelector((state) => state.userData.userOrder);
   const toggleShow = () => setStaticModal(!staticModal);
   const data = new FormData();
+
   const config = {
     method: "get",
     url: "http://127.0.0.1:8000/api/profile",
@@ -40,7 +42,8 @@ export default function UserProfile() {
   const fetchUserData = () => {
     axios(config)
       .then(function (res) {
-        dispatch(saveData(res.data.data));
+        dispatch(saveData(res.data.data.userInfo));
+        dispatch(saveOrder(res.data.data.userOrder));
       })
       .catch(function (error) {
         console.log(error);
@@ -49,6 +52,7 @@ export default function UserProfile() {
   useEffect(() => {
     fetchUserData();
   }, []);
+
   if (userData == "") {
     return (
       <div
@@ -76,7 +80,7 @@ export default function UserProfile() {
                   fluid
                 />
                 <p className="h4 mb-3" style={{ color: " #ed2647" }}>
-                  {userData.userInfo.firstName} {userData.userInfo.lastName}
+                  {userData.firstName} {userData.lastName}
                 </p>
                 <div className="d-flex justify-content-center mb-2">
                   <Link to="edit">
@@ -113,7 +117,7 @@ export default function UserProfile() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {userData.userInfo.firstName}
+                      {userData.firstName}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -124,7 +128,7 @@ export default function UserProfile() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {userData.userInfo.lastName}
+                      {userData.lastName}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -135,7 +139,7 @@ export default function UserProfile() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {userData.userInfo.userEmail}
+                      {userData.userEmail}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -146,7 +150,7 @@ export default function UserProfile() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {userData.userInfo.phoneNumber}
+                      {userData.phoneNumber}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -157,7 +161,18 @@ export default function UserProfile() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {userData.userInfo.gender}
+                      {userData.gender}
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>Birthday</MDBCardText>
+                  </MDBCol>
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-muted">
+                      {userData.birthday}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -167,7 +182,16 @@ export default function UserProfile() {
         </MDBRow>
         <h3>Order History</h3>
         <MDBRow>
-          <OrderTable />
+          {userOrder.length == 0 ? (
+            <div>
+              <p>There are no orders to display</p>
+              <Link to="/shops">
+                <MDBBtn color="dark">Shop now</MDBBtn>
+              </Link>
+            </div>
+          ) : (
+            <OrderTable />
+          )}
         </MDBRow>
       </MDBContainer>
     </section>

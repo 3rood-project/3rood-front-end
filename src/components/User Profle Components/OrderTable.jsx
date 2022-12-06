@@ -10,7 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 export default function OrderTable() {
-  const userOrders = useSelector((state) => state.userData.userData.userOrder);
+  const userOrders = useSelector((state) => state.userData.userOrder);
 
   return (
     <MDBListGroup>

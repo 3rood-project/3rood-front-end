@@ -8,8 +8,90 @@ import {
   MDBCardBody,
   MDBInput,
 } from "mdb-react-ui-kit";
+import { useAuthUser } from "react-auth-kit";
+import useValidation from "../hooks/useValidation";
+import { useState } from "react";
+import axios from "axios";
+import { saveData } from "../../redusers/UserData";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useEffect } from "react";
+const qs = require("qs");
 
 function EditProfile() {
+  const auth = useAuthUser();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [cookies, setCookies, removeCookies] = useCookies(["_auth"]);
+  const userData = useSelector((state) => state.userData.userData);
+  useEffect(() => {
+    if (userData == "") {
+      dispatch(saveData(auth().user));
+    }
+  }, [userData]);
+
+  const [userInfo, setUserInfo] = useState({
+    first_name: userData.firstName,
+    last_name: userData.lastName,
+    email: userData.userEmail,
+    city: userData.city,
+    gender: userData.gender,
+    phone_number: userData.phoneNumber,
+    birthday: userData.birthday,
+    profile_photo: "",
+  });
+
+  const config = {
+    method: "put",
+    url: "http://127.0.0.1:8000/api/profile/edit",
+    headers: {
+      Accept: "application/vnd.api+json",
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Bearer ${auth().token}`,
+    },
+    data: qs.stringify(userInfo),
+  };
+  const handleOnChange = (e) => {
+    setUserInfo((pervs) => ({ ...pervs, [e.target.name]: e.target.value }));
+  };
+
+  const { NameValidation, isNotEmptyValidation, phoneValidation, message } =
+    useValidation();
+
+  const checkValidation = () => {
+    let fname = NameValidation("first_name", userInfo.first_name);
+    let lname = NameValidation("last_name", userInfo.last_name);
+    let phoneNumber = phoneValidation(userInfo.phone_number);
+    let city = isNotEmptyValidation("city", userInfo.city);
+    let gender = isNotEmptyValidation("gender", userInfo.gender);
+    let birthday = isNotEmptyValidation("birthday", userInfo.birthday);
+    if (fname && lname && phoneNumber && city && gender && birthday)
+      return true;
+    else return false;
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    if (checkValidation()) {
+      axios(config)
+        .then(function (res) {
+          if (res.data.data) {
+            dispatch(saveData(res.data.data.userInfo));
+            setCookies("_auth_state", {
+              ...auth(),
+              user: res.data.data.userInfo,
+            });
+
+            return navigate("/userProfile");
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
+
   return (
     <>
       <MDBContainer
@@ -19,7 +101,7 @@ function EditProfile() {
       >
         <MDBRow className="justify-content-around">
           <MDBCol md="5">
-            <form>
+            <form onSubmit={handleEdit}>
               <MDBCard className="my-5">
                 <MDBCardBody className="p-5">
                   <div className="text-center mb-4">
@@ -27,18 +109,28 @@ function EditProfile() {
                   </div>{" "}
                   <MDBRow className="d-flex justify-content-between">
                     <div className="col-6 ">
+                      <p className="text-danger m-0 small">
+                        {message.first_name}
+                      </p>
                       <MDBInput
                         wrapperClass="mb-4"
                         label="First Name"
-                        value="osama"
+                        name="first_name"
+                        onChange={handleOnChange}
+                        value={userInfo.first_name}
                       />
                     </div>
                     <div className="col-6 ">
+                      <p className="text-danger m-0 small">
+                        {message.last_name}
+                      </p>
                       <MDBInput
                         wrapperClass="mb-4"
                         label="Last Name"
                         type="text"
-                        value="dasooky"
+                        name="last_name"
+                        onChange={handleOnChange}
+                        value={userInfo.last_name}
                       />
                     </div>
                     <div className="col-12 ">
@@ -46,40 +138,71 @@ function EditProfile() {
                         wrapperClass="mb-4"
                         label="Email"
                         type="email"
-                        value="osama.dasooky@gmail.com"
+                        name="email"
+                        disabled
+                        onChange={handleOnChange}
+                        value={userInfo.email}
                       />
                       <div className="col-12">
-                        <MDBInput wrapperClass="mb-4" type="file" />
+                        <p className="text-danger m-0 small">{message.file}</p>
+                        <MDBInput
+                          wrapperClass="mb-4"
+                          type="file"
+                          name="profile_photo"
+                          onChange={(e) => {
+                            console.log(e.target.files[0].name.split(".")[1]);
+                          }}
+                        />
                       </div>
                     </div>
                     <div className="col-6 ">
+                      <p className="text-danger m-0 small">
+                        {message.birthday}
+                      </p>
                       <MDBInput
                         wrapperClass="mb-4"
                         label="birthday"
                         type="date"
+                        name="birthday"
+                        onChange={handleOnChange}
+                        value={userInfo.birthday}
                       />
                     </div>
                     <div className="col-6 ">
-                      <select name="Gender" className="form-select">
+                      <p className="text-danger m-0 small">{message.gender}</p>
+                      <select
+                        name="gender"
+                        className="form-select"
+                        onChange={handleOnChange}
+                      >
+                        <option value="">gender</option>
                         <option value="male">male</option>
                         <option value="Female">Female</option>
                       </select>
                     </div>
 
                     <div className="col-6 ">
+                      <p className="text-danger m-0 small">{message.city}</p>
                       <MDBInput
                         wrapperClass="mb-4"
                         label="City"
                         type="text"
-                        value="Zarqa"
+                        name="city"
+                        onChange={handleOnChange}
+                        value={userInfo.city}
                       />
                     </div>
                     <div className="col-6 ">
+                      <p className="text-danger m-0 small">
+                        {message.phone_number}
+                      </p>
                       <MDBInput
                         wrapperClass="mb-4"
                         label="Phone Number"
                         type="tel"
-                        value="0786238190"
+                        name="phone_number"
+                        onChange={handleOnChange}
+                        value={userInfo.phone_number}
                       />
                     </div>
                   </MDBRow>

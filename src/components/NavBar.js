@@ -25,6 +25,7 @@ export default function NavBar() {
   const signOut = useSignOut();
   const isAuthenticated = useIsAuthenticated();
   const navigate = useNavigate();
+
   return (
     <MDBNavbar expand="lg" light sticky bgColor="light">
       <MDBContainer fluid>

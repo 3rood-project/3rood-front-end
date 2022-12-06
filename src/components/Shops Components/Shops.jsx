@@ -7,9 +7,11 @@ import {
   MDBBtn,
 } from "mdb-react-ui-kit";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export const Shops = () => {
+export const Shops = ({ shopData }) => {
+  const navigate = useNavigate();
+
   return (
     <>
       <MDBCol md="6" lg="3" className="mb-4 ps-2">
@@ -19,11 +21,7 @@ export const Shops = () => {
             rippleTag="div"
             className="bg-image rounded hover-zoom"
           >
-            <MDBCardImage
-              src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/shoes%20(3).webp"
-              fluid
-              className="w-100"
-            />
+            <MDBCardImage src={shopData.ProfilePhoto} fluid className="w-100" />
             <Link>
               <div class="hover-overlay">
                 <div
@@ -39,15 +37,19 @@ export const Shops = () => {
                 className="card-title mb-3 text-capitalize"
                 style={{ color: " #ed2647", fontWeight: 700 }}
               >
-                shop name
+                {shopData.shopName.slice(0, 30)}
               </h4>
             </Link>
-            <p>Category</p>{" "}
-            <Link to="/shopProfile">
-              <MDBBtn className="mx-2" color="dark">
-                Shop now
-              </MDBBtn>
-            </Link>
+            <p>{shopData.category}</p>{" "}
+            <MDBBtn
+              className="mx-2"
+              color="dark"
+              onClick={() => {
+                navigate(`/shopProfile/${shopData.shopName}`);
+              }}
+            >
+              Shop now
+            </MDBBtn>
           </MDBCardBody>
         </MDBCard>
       </MDBCol>
