@@ -49,14 +49,29 @@ function Register() {
     data: userInfo,
   };
   const checkValidation = () => {
-    NameValidation("first_name", userInfo.first_name);
-    NameValidation("last_name", userInfo.last_name);
-    emailValidation(userInfo.email);
-    passwordValidation(userInfo.password, userInfo.password_confirmation);
-    phoneValidation(userInfo.phone_number);
-    isNotEmptyValidation("city", userInfo.city);
-    isNotEmptyValidation("gender", userInfo.gender);
-    isNotEmptyValidation("birthday", userInfo.birthday);
+    let fName = NameValidation("first_name", userInfo.first_name);
+    let lName = NameValidation("last_name", userInfo.last_name);
+    let email = emailValidation(userInfo.email);
+    let pass = passwordValidation(
+      userInfo.password,
+      userInfo.password_confirmation
+    );
+    let phone = phoneValidation(userInfo.phone_number);
+    let city = isNotEmptyValidation("city", userInfo.city);
+    let gender = isNotEmptyValidation("gender", userInfo.gender);
+    let birthday = isNotEmptyValidation("birthday", userInfo.birthday);
+    if (
+      fName &&
+      lName &&
+      email &&
+      pass &&
+      phone &&
+      city &&
+      gender &&
+      birthday
+    ) {
+      return true;
+    } else return false;
   };
 
   const handleOnChange = (e) => {
@@ -64,19 +79,8 @@ function Register() {
   };
   const handleRegister = (e) => {
     e.preventDefault();
-    checkValidation();
 
-    if (
-      NameValidation("first_name", userInfo.first_name) &&
-      NameValidation("last_name", userInfo.last_name) &&
-      emailValidation(userInfo.email) &&
-      passwordValidation(userInfo.password, userInfo.password_confirmation) &&
-      phoneValidation(userInfo.phone_number) &&
-      isNotEmptyValidation("city", userInfo.city) &&
-      isNotEmptyValidation("gender", userInfo.gender) &&
-      isNotEmptyValidation("birthday", userInfo.birthday)
-    ) {
-      console.log("check ok");
+    if (checkValidation()) {
       axios(config)
         .then(function (res) {
           if (

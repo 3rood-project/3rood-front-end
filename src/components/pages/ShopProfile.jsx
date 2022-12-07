@@ -8,10 +8,49 @@ import {
   MDBCardBody,
   MDBCardImage,
   MDBTypography,
+  MDBSpinner,
 } from "mdb-react-ui-kit";
 import ShopProduct from "../ShopProfile Components/ShopProduct";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
 export function ShopProfile() {
+  const { shopName } = useParams();
+
+  const [shopData, setShopData] = useState([]);
+  var config = {
+    method: "get",
+    url: `http://127.0.0.1:8000/api/allShops/${shopName}`,
+    headers: {
+      Accept: "application/vnd.api+json",
+      "Content-Type": "application/vnd.api+json",
+    },
+  };
+  useEffect(() => {
+    axios(config)
+      .then(function (res) {
+        setShopData(res.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
+  console.log(shopData);
+
+  if (shopData.length == 0) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "50vh" }}
+      >
+        <MDBSpinner role="status " style={{ width: "3rem", height: "3rem" }}>
+          <span className="visually-hidden">Loading...</span>
+        </MDBSpinner>
+      </div>
+    );
+  }
   return (
     <div className="gradient-custom-2">
       <MDBContainer className="py-5 h-100">
@@ -19,26 +58,28 @@ export function ShopProfile() {
           <MDBCol lg="12" xl="12">
             <MDBCard>
               <div
-                className="rounded-top text-white d-flex flex-row"
-                style={{ backgroundColor: "#000", height: "200px" }}
+                className="rounded-top text-white d-flex flex-column flex-sm-row align-items-center"
+                style={{ backgroundColor: "#000", minHeight: "200px" }}
               >
                 <div
-                  className="ms-md-4 mt-md-5 d-flex flex-column"
+                  className="ms-md-4 mt-md-5  d-flex flex-column  align-self-center"
                   style={{ width: "250px" }}
                 >
                   <MDBCardImage
-                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                    src={shopData.shop_info.ProfilePhoto}
                     alt="Generic placeholder image"
-                    className="mt-4 mb-2 img-thumbnail"
+                    className="mt-2 mt-md-5 mb-2 img-thumbnail "
                     fluid
-                    style={{ width: "250px", zIndex: "1" }}
+                    style={{ width: "300px", zIndex: "1" }}
                   />
                 </div>
-                <div className="ms-4" style={{ marginTop: "110px" }}>
+                <div className="ms-4 mt-md-5" style={{ marginsTop: "90px" }}>
                   <MDBTypography tag="h2" style={{ color: " #ed2647" }}>
-                    Shop Name
+                    {shopData.shop_info.shopName}
                   </MDBTypography>
-                  <MDBCardText tag="h5">category</MDBCardText>
+                  <MDBCardText tag="h5">
+                    {shopData.shop_info.category}
+                  </MDBCardText>
                 </div>
               </div>
               <div
@@ -49,7 +90,7 @@ export function ShopProfile() {
                   <div className="me-4">
                     <MDBCardText className="mb-1 h5 ">city</MDBCardText>
                     <MDBCardText className="small text-muted mb-0">
-                      zarqa
+                      {shopData.shop_info.city.slice(0, 10)}
                     </MDBCardText>
                   </div>
                   <div>
@@ -70,11 +111,14 @@ export function ShopProfile() {
                 </div>
                 <hr className="mt-0" />
                 <MDBRow className="g-0 justify-content-start align-items-start ">
-                  <ShopProduct />
-                  <ShopProduct />
-                  <ShopProduct />
-                  <ShopProduct />
-                  <ShopProduct />
+                  {shopData.shop_products?.map((product) => {
+                    return (
+                      <ShopProduct
+                        productData={product}
+                        key={product.productName}
+                      />
+                    );
+                  })}
                 </MDBRow>
               </MDBCardBody>
             </MDBCard>
