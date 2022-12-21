@@ -22,7 +22,7 @@ export const Shops = ({ shopData }) => {
             className="bg-image rounded hover-zoom"
           >
             <MDBCardImage src={shopData.ProfilePhoto} fluid className="w-100" />
-            <Link>
+            <Link to={`/shopProfile/${shopData.shopName}`}>
               <div class="hover-overlay">
                 <div
                   className="mask"
@@ -32,7 +32,10 @@ export const Shops = ({ shopData }) => {
             </Link>
           </MDBRipple>
           <MDBCardBody className="text-center">
-            <Link to="/shopProfile" className="text-reset">
+            <Link
+              to={`/shopProfile/${shopData.shopName}`}
+              className="text-reset"
+            >
               <h4
                 className="card-title mb-3 text-capitalize"
                 style={{ color: " #ed2647", fontWeight: 700 }}

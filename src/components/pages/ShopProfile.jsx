@@ -12,34 +12,20 @@ import {
 } from "mdb-react-ui-kit";
 import ShopProduct from "../ShopProfile Components/ShopProduct";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
 import { useEffect } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchShopProfile } from "../../redusers/AllShopsReducer";
 
 export function ShopProfile() {
   const { shopName } = useParams();
+  const dispatch = useDispatch();
+  const { shopData } = useSelector((state) => state.shops);
 
-  const [shopData, setShopData] = useState([]);
-  var config = {
-    method: "get",
-    url: `http://127.0.0.1:8000/api/allShops/${shopName}`,
-    headers: {
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-    },
-  };
   useEffect(() => {
-    axios(config)
-      .then(function (res) {
-        setShopData(res.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    dispatch(fetchShopProfile(shopName));
   }, []);
-  console.log(shopData);
 
-  if (shopData.length == 0) {
+  if (shopData.length === 0) {
     return (
       <div
         className="d-flex justify-content-center align-items-center"
@@ -51,6 +37,7 @@ export function ShopProfile() {
       </div>
     );
   }
+
   return (
     <div className="gradient-custom-2">
       <MDBContainer className="py-5 h-100">

@@ -73,7 +73,9 @@ export default function OrderDetails() {
                         fontWeight: "bold",
                       }}
                     >
-                      {auth().user.first_name}
+                      {auth().role === "user"
+                        ? auth().user.first_name
+                        : auth().shop.shopName}
                     </span>
                   </MDBTypography>
                 </MDBCardHeader>

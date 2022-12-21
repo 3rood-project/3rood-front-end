@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MDBCol,
   MDBContainer,
@@ -10,17 +10,38 @@ import {
   MDBTypography,
   MDBBtn,
   MDBIcon,
+  MDBSpinner,
 } from "mdb-react-ui-kit";
-import { Link } from "react-router-dom";
 import PillsForShop from "../ShopProfile Components/PillsForShop";
 import AddOffer from "../ShopProfile Components/AddOffer";
 import ChangePass from "../User Profle Components/ChangePass";
+import { useAuthUser } from "react-auth-kit";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchShopProfileData } from "../../redusers/ShopProfileReduser";
 export function ShopOwner() {
   const [staticModal, setStaticModal] = useState(false);
   const [staticModal2, setStaticModal2] = useState(false);
-
+  const auth = useAuthUser();
+  const dispatch = useDispatch();
+  const { shopData } = useSelector((state) => state.shopProfile);
   const toggleShow = () => setStaticModal(!staticModal);
   const toggleShow2 = () => setStaticModal2(!staticModal2);
+  useEffect(() => {
+    dispatch(fetchShopProfileData(auth().token));
+  }, []);
+
+  if (shopData.length == 0) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "50vh" }}
+      >
+        <MDBSpinner role="status " style={{ width: "3rem", height: "3rem" }}>
+          <span className="visually-hidden">Loading...</span>
+        </MDBSpinner>
+      </div>
+    );
+  }
   return (
     <div className="gradient-custom-2">
       <MDBContainer className="py-5 h-100">
@@ -47,7 +68,7 @@ export function ShopOwner() {
                   style={{ width: "200px" }}
                 >
                   <MDBCardImage
-                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                    src={shopData.ProfilePhoto}
                     alt="Generic placeholder image"
                     className="mt-4 mb-2 img-thumbnail"
                     fluid
@@ -56,9 +77,9 @@ export function ShopOwner() {
                 </div>
                 <div className="ms-4" style={{ marginTop: "100px" }}>
                   <MDBTypography tag="h2" style={{ color: " #ed2647" }}>
-                    Shop Name
+                    {shopData.shopName}
                   </MDBTypography>
-                  <MDBCardText tag="h5">category</MDBCardText>
+                  <MDBCardText tag="h5">{shopData.category}</MDBCardText>
                 </div>
               </div>
 
@@ -70,7 +91,7 @@ export function ShopOwner() {
                   <div className="me-4">
                     <MDBCardText className="mb-1 h5 ">City</MDBCardText>
                     <MDBCardText className="small text-muted mb-0">
-                      Zarqa
+                      {shopData.city.slice(0, 10)}
                     </MDBCardText>
                   </div>
                   <div>
@@ -78,7 +99,8 @@ export function ShopOwner() {
                       Open
                     </MDBCardText>
                     <MDBCardText className="small text-muted mb-0">
-                      8:00AM - 10:00PM
+                      {shopData.openTime.slice(0, 5)} -{" "}
+                      {shopData.closeTime.slice(0, 5)}
                     </MDBCardText>
                   </div>
                 </div>
