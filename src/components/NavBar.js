@@ -18,14 +18,27 @@ import {
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "./asset/BrandFiles/3rood-low-resolution-logo-color-on-transparent-background.png";
 import man from "./asset/man.png";
-import { useSignOut } from "react-auth-kit";
+import { useAuthUser, useSignOut } from "react-auth-kit";
 import { useIsAuthenticated } from "react-auth-kit";
+import axios from "axios";
 export default function NavBar() {
   const [showBasic, setShowBasic] = useState(false);
+  const auth = useAuthUser();
+
   const signOut = useSignOut();
   const isAuthenticated = useIsAuthenticated();
   const navigate = useNavigate();
-
+  const logout = () => {
+    axios.request({
+      method: "delete",
+      url: "http://127.0.0.1:8000/api/logout",
+      headers: {
+        Accept: "application/vnd.api+json",
+        "Content-Type": "application/vnd.api+json",
+        Authorization: `Bearer ${auth().token}`,
+      },
+    });
+  };
   return (
     <MDBNavbar expand="lg" light sticky bgColor="light">
       <MDBContainer fluid>
@@ -118,7 +131,15 @@ export default function NavBar() {
               <MDBNavbarItem className="px-3">
                 <MDBDropdown>
                   <MDBDropdownToggle tag="a" className="nav-link" role="button">
-                    <img src={man} alt="" width="40px" />
+                    <img
+                      src={
+                        auth().role == "user"
+                          ? auth().user.ProfilePhoto
+                          : auth().shop.ProfilePhoto
+                      }
+                      alt=""
+                      width="40px"
+                    />
                   </MDBDropdownToggle>
                   <MDBDropdownMenu>
                     <MDBDropdownItem className="py-2 px-3 ">
@@ -136,6 +157,7 @@ export default function NavBar() {
                       style={{ cursor: "pointer" }}
                       onClick={() => {
                         signOut();
+                        logout();
                         navigate("/", { replace: true });
                       }}
                     >

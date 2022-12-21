@@ -7,15 +7,16 @@ import {
   MDBCard,
   MDBCardBody,
   MDBInput,
+  MDBSpinner,
 } from "mdb-react-ui-kit";
 import { useAuthUser } from "react-auth-kit";
 import useValidation from "../hooks/useValidation";
 import { useState } from "react";
 import axios from "axios";
-import { saveData } from "../../redusers/UserData";
+import { fetchUserProfile, saveData } from "../../redusers/UserData";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+
 import { useEffect } from "react";
 const qs = require("qs");
 
@@ -23,14 +24,12 @@ function EditProfile() {
   const auth = useAuthUser();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [cookies, setCookies, removeCookies] = useCookies(["_auth"]);
-  const userData = useSelector((state) => state.userData.userData);
+  const { userData, isLoading } = useSelector((state) => state.userData);
   useEffect(() => {
-    if (userData == "") {
-      dispatch(saveData(auth().user));
+    if (userData.length === 0) {
+      dispatch(fetchUserProfile(auth().token));
     }
-  }, [userData]);
-
+  }, []);
   const [userInfo, setUserInfo] = useState({
     first_name: userData.firstName,
     last_name: userData.lastName,
@@ -78,11 +77,6 @@ function EditProfile() {
         .then(function (res) {
           if (res.data.data) {
             dispatch(saveData(res.data.data.userInfo));
-            setCookies("_auth_state", {
-              ...auth(),
-              user: res.data.data.userInfo,
-            });
-
             return navigate("/userProfile");
           }
         })
@@ -91,7 +85,18 @@ function EditProfile() {
         });
     }
   };
-
+  if (userData.length === 0) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "50vh" }}
+      >
+        <MDBSpinner role="status " style={{ width: "3rem", height: "3rem" }}>
+          <span className="visually-hidden">Loading...</span>
+        </MDBSpinner>
+      </div>
+    );
+  }
   return (
     <>
       <MDBContainer

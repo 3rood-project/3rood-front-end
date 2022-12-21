@@ -15,8 +15,7 @@ import OrderTable from "../User Profle Components/OrderTable";
 import { Link } from "react-router-dom";
 import ChangePass from "../User Profle Components/ChangePass";
 import { useAuthUser } from "react-auth-kit";
-import axios from "axios";
-import { saveData, saveOrder } from "../../redusers/UserData";
+import { fetchUserProfile } from "../../redusers/UserData";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function UserProfile() {
@@ -24,36 +23,16 @@ export default function UserProfile() {
   const auth = useAuthUser();
   const dispatch = useDispatch();
 
-  const userData = useSelector((state) => state.userData.userData);
-  const userOrder = useSelector((state) => state.userData.userOrder);
+  const { userData, userOrder, isLoading } = useSelector(
+    (state) => state.userData
+  );
   const toggleShow = () => setStaticModal(!staticModal);
-  const data = new FormData();
 
-  const config = {
-    method: "get",
-    url: "http://127.0.0.1:8000/api/profile",
-    headers: {
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-      Authorization: `Bearer ${auth().token}`,
-    },
-    data: data,
-  };
-  const fetchUserData = () => {
-    axios(config)
-      .then(function (res) {
-        dispatch(saveData(res.data.data.userInfo));
-        dispatch(saveOrder(res.data.data.userOrder));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
   useEffect(() => {
-    fetchUserData();
+    dispatch(fetchUserProfile(auth().token));
   }, []);
 
-  if (userData == "") {
+  if (isLoading) {
     return (
       <div
         className="d-flex justify-content-center align-items-center"
