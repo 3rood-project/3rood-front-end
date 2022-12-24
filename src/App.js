@@ -1,11 +1,6 @@
 import NavBar from "./components/NavBar";
 import { Route, Routes } from "react-router-dom";
-import {
-  AuthProvider,
-  RequireAuth,
-  useAuthUser,
-  useIsAuthenticated,
-} from "react-auth-kit";
+import { RequireAuth, useAuthUser, useIsAuthenticated } from "react-auth-kit";
 
 import { Home } from "./components/pages/Home";
 import { About } from "./components/pages/About";
@@ -26,6 +21,8 @@ import { ShopOwner } from "./components/pages/ShopOwner";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchUserProfile } from "./redusers/UserData";
+import Authorization from "./Authorization";
+import { PageNotFound } from "./PageNotFound";
 
 function App() {
   //---------------------------------------------------------------------//
@@ -46,21 +43,72 @@ function App() {
       <Routes>
         {/* ----------public routes----------- */}
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/shopLogin" element={<ShopLogin />} />
-        <Route path="/joinUs" element={<JoinUs />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={
+            <Authorization forAuth={false}>
+              <Login />
+            </Authorization>
+          }
+        />
+        <Route
+          path="/shopLogin"
+          element={
+            <Authorization forAuth={false}>
+              <ShopLogin />
+            </Authorization>
+          }
+        />
+        <Route
+          path="/joinUs"
+          element={
+            <Authorization forAuth={false}>
+              <JoinUs />
+            </Authorization>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <Authorization forAuth={false}>
+              <Register />
+            </Authorization>
+          }
+        />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/shops" element={<Shops />} />
-        <Route path="/shopProfile/:shopName" element={<ShopProfile />} />
+        <Route
+          path="/cart"
+          element={
+            <Authorization deny={"shop"}>
+              <Cart />
+            </Authorization>
+          }
+        />
+        <Route
+          path="/shops"
+          element={
+            <Authorization deny={"shop"}>
+              <Shops />
+            </Authorization>
+          }
+        />
+        <Route
+          path="/shopProfile/:shopName"
+          element={
+            <Authorization deny={"shop"}>
+              <ShopProfile />
+            </Authorization>
+          }
+        />
         {/* ----------user routes-------------- */}
         <Route
           path="/checkout"
           element={
             <RequireAuth loginPath={"/login"}>
-              <Checkout />
+              <Authorization permissions="user">
+                <Checkout />
+              </Authorization>
             </RequireAuth>
           }
         />
@@ -76,13 +124,34 @@ function App() {
           path="/userProfile"
           element={
             <RequireAuth loginPath={"/login"}>
-              <UserProfile />
+              <Authorization deny={"shop"}>
+                <UserProfile />
+              </Authorization>
             </RequireAuth>
           }
         />
-        <Route path="/userProfile/edit" element={<EditProfile />} />
+        <Route
+          path="/userProfile/edit"
+          element={
+            <RequireAuth loginPath={"/login"}>
+              <Authorization deny={"shop"}>
+                <EditProfile />
+              </Authorization>
+            </RequireAuth>
+          }
+        />
         {/* ----------shop routes-------------/ */}
-        <Route path="/shopOwner" element={<ShopOwner />} />
+        <Route
+          path="/shopOwner"
+          element={
+            <RequireAuth loginPath={"/login"}>
+              <Authorization permissions="shop">
+                <ShopOwner />
+              </Authorization>
+            </RequireAuth>
+          }
+        />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
       <Footer />
     </>

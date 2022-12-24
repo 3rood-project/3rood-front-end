@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MDBCol, MDBCardBody, MDBInput, MDBTextArea } from "mdb-react-ui-kit";
 
-function AddOfferComp({ message, handleChange, offerData }) {
+function AddOfferComp({ message, handleChange, offerData, uploadImage }) {
   return (
     <>
       <MDBCol md="12">
@@ -54,9 +54,9 @@ function AddOfferComp({ message, handleChange, offerData }) {
                   wrapperClass="mb-4 "
                   label="Quantity"
                   type="number"
-                  value={offerData?.product_Quantity}
                   name="product_Quantity"
                   onChange={handleChange}
+                  value={offerData?.product_Quantity}
                 />
               </div>
               <div className="col-6">
@@ -71,15 +71,29 @@ function AddOfferComp({ message, handleChange, offerData }) {
                 />
               </div>
             </div>
-            <span>Product photo</span>
-            <p className="text-danger m-0 small">{message?.product_image}</p>
-            <MDBInput
-              wrapperClass="mb-4"
-              type="file"
-              value={offerData?.product_image}
-              name="product_image"
-              onChange={handleChange}
-            />
+            <div className="d-flex align-items-center mb-3">
+              <div className="col-4">
+                <img
+                  src={offerData == undefined ? "" : offerData?.product_image}
+                  alt=""
+                  width={100}
+                />
+              </div>
+              <div className="col-8">
+                <span>Product photo</span>
+                <p className="text-danger m-0 small">
+                  {message?.product_image}
+                </p>
+                <MDBInput
+                  wrapperClass="mb-4"
+                  type="file"
+                  name="product_image"
+                  onChange={(e) => {
+                    uploadImage(e.target.files[0]);
+                  }}
+                />
+              </div>
+            </div>
             <p className="text-danger m-0 small">
               {message?.product_description}
             </p>

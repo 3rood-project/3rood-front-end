@@ -9,6 +9,7 @@ import {
   MDBCardImage,
   MDBTypography,
   MDBSpinner,
+  MDBBtn,
 } from "mdb-react-ui-kit";
 import ShopProduct from "../ShopProfile Components/ShopProduct";
 import { useParams } from "react-router-dom";
@@ -37,7 +38,6 @@ export function ShopProfile() {
       </div>
     );
   }
-
   return (
     <div className="gradient-custom-2">
       <MDBContainer className="py-5 h-100">
@@ -81,11 +81,20 @@ export function ShopProfile() {
                     </MDBCardText>
                   </div>
                   <div>
-                    <MDBCardText className="mb-1 h5 text-success">
-                      Open
-                    </MDBCardText>
+                    {Number(shopData.shop_info.openTime.slice(0, 2)) <
+                    new Date().getHours() <
+                    Number(shopData.shop_info.closeTime.slice(0, 2)) ? (
+                      <MDBCardText className="mb-1 h5 text-success">
+                        Open
+                      </MDBCardText>
+                    ) : (
+                      <MDBCardText className="mb-1 h5 text-danger">
+                        Close
+                      </MDBCardText>
+                    )}
                     <MDBCardText className="small text-muted mb-0">
-                      8:00AM - 10:00PM
+                      {shopData.shop_info.openTime.slice(0, 5)} -{" "}
+                      {shopData.shop_info.closeTime.slice(0, 5)}
                     </MDBCardText>
                   </div>
                 </div>
@@ -99,11 +108,17 @@ export function ShopProfile() {
                 <hr className="mt-0" />
                 <MDBRow className="g-0 justify-content-start align-items-start ">
                   {shopData.shop_products?.map((product) => {
-                    return (
+                    return new Date(product.expirationDate) > new Date() ? (
                       <ShopProduct
                         productData={product}
+                        shopData={{
+                          shop_id: shopData.shop_info.shop_id,
+                          shopName: shopData.shop_info.shopName,
+                        }}
                         key={product.productName}
                       />
+                    ) : (
+                      ""
                     );
                   })}
                 </MDBRow>

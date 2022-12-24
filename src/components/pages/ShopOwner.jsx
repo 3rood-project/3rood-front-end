@@ -18,6 +18,7 @@ import ChangePass from "../User Profle Components/ChangePass";
 import { useAuthUser } from "react-auth-kit";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchShopProfileData } from "../../redusers/ShopProfileReduser";
+
 export function ShopOwner() {
   const [staticModal, setStaticModal] = useState(false);
   const [staticModal2, setStaticModal2] = useState(false);

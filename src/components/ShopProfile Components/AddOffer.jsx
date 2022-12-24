@@ -16,6 +16,9 @@ import Swal from "sweetalert2";
 import { fetchShopProfileData } from "../../redusers/ShopProfileReduser";
 import useValidation from "../hooks/useValidation";
 import AddOfferComp from "./AddOfferComp";
+import { v4 } from "uuid";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../fierbase";
 
 export default function AddOffer({ setStaticModal, staticModal, toggleShow }) {
   const auth = useAuthUser();
@@ -55,7 +58,19 @@ export default function AddOffer({ setStaticModal, staticModal, toggleShow }) {
       return true;
     } else return false;
   };
-  const handleAddOffer = () => {
+
+  const uploadImage = (image) => {
+    if (image == null) return false;
+    const imageRef = ref(storage, `userImage/${image.name + v4()}`);
+    const response = uploadBytes(imageRef, image).then((res) => {
+      console.log(res);
+      getDownloadURL(res.ref).then((response) => {
+        setOfferData((pervs) => ({ ...pervs, product_image: response }));
+      });
+    });
+    return response;
+  };
+  const handleAddOffer = async () => {
     const config = {
       method: "post",
       url: "http://127.0.0.1:8000/api/shop/addOffer",
@@ -66,7 +81,9 @@ export default function AddOffer({ setStaticModal, staticModal, toggleShow }) {
       },
       data: offerData,
     };
+
     if (checkValidation()) {
+      console.log("check ok");
       axios(config)
         .then(function (res) {
           console.log(res.data);
@@ -125,6 +142,7 @@ export default function AddOffer({ setStaticModal, staticModal, toggleShow }) {
                 handleChange={handleChange}
                 offerData={offerData}
                 message={message}
+                uploadImage={uploadImage}
               />
             </MDBModalBody>
             <MDBModalFooter>

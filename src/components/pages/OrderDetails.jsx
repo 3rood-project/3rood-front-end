@@ -40,7 +40,6 @@ export default function OrderDetails() {
   useEffect(() => {
     fetchOrderData();
   }, []);
-
   if (orderData == null) {
     return (
       <div
@@ -65,7 +64,7 @@ export default function OrderDetails() {
               <MDBCard style={{ borderRadius: "10px" }}>
                 <MDBCardHeader className="px-4 py-5">
                   <MDBTypography tag="h5" className="text-muted mb-0">
-                    Thanks for your Order,
+                    Thanks for your Order ,
                     <span
                       style={{
                         color: " #ed2647",
@@ -74,7 +73,7 @@ export default function OrderDetails() {
                       }}
                     >
                       {auth().role === "user"
-                        ? auth().user.first_name
+                        ? auth().user.firstName
                         : auth().shop.shopName}
                     </span>
                   </MDBTypography>
@@ -87,7 +86,7 @@ export default function OrderDetails() {
                           <MDBRow>
                             <MDBCol md="3">
                               <MDBCardImage
-                                src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/13.webp"
+                                src={order.productPhoto}
                                 fluid
                                 alt="Phone"
                               />

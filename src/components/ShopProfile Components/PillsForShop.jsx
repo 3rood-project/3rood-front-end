@@ -84,7 +84,10 @@ export default function PillsForShop() {
           </h3>
           <MDBListGroup>
             {shopData.shop_orders?.map((offer) => {
-              if (offer.orderStatus == "approved") {
+              if (
+                offer.orderStatus == "approved" &&
+                offer.orderStage != "Delivered"
+              ) {
                 return <ApprovedOrder offerData={offer} />;
               }
             })}

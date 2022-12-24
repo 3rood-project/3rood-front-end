@@ -13,6 +13,7 @@ import useValidation from "../hooks/useValidation";
 import ChangePassComp from "./ChangePassComp";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useAuthUser } from "react-auth-kit";
 
 const qs = require("qs");
 
@@ -26,6 +27,8 @@ export default function ChangePass({
     password: "",
     password_confirmation: "",
   });
+  const auth = useAuthUser();
+
   const [error, setError] = useState(false);
   const { passwordValidation, isNotEmptyValidation, message, setMessage } =
     useValidation();
@@ -34,13 +37,19 @@ export default function ChangePass({
     password: userPass.password,
     password_confirmation: userPass.password_confirmation,
   });
+  const uri =
+    auth().role === "user"
+      ? "http://127.0.0.1:8000/api/userChangePass"
+      : auth().role === "shop"
+      ? "http://127.0.0.1:8000/api/shopChangePass"
+      : "";
   const config = {
     method: "put",
-    url: "http://127.0.0.1:8000/api/userChangePass",
+    url: uri,
     headers: {
       Accept: "application/vnd.api+json",
       "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: "Bearer 17|PQRFPeWAAJtqxtCJRKoKwXSuv1KtD1UnSeCcf1KJ",
+      Authorization: `Bearer ${auth().token}`,
     },
     data: data,
   };
