@@ -20,7 +20,6 @@ export const SideBar = () => {
       dispatch(fetchAllShops());
     }
   }, []);
-  console.log(allShops, isLoading);
   if (isLoading) {
     return (
       <div

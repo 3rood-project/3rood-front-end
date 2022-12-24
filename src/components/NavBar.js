@@ -17,14 +17,18 @@ import {
 } from "mdb-react-ui-kit";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "./asset/BrandFiles/3rood-low-resolution-logo-color-on-transparent-background.png";
-import man from "./asset/man.png";
 import { useAuthUser, useSignOut } from "react-auth-kit";
 import { useIsAuthenticated } from "react-auth-kit";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { emptyCart } from "../redusers/CartReduser";
+
 export default function NavBar() {
   const [showBasic, setShowBasic] = useState(false);
   const auth = useAuthUser();
+  const dispatch = useDispatch();
 
+  const cartItems = useSelector((state) => state.cart.items);
   const signOut = useSignOut();
   const isAuthenticated = useIsAuthenticated();
   const navigate = useNavigate();
@@ -97,16 +101,20 @@ export default function NavBar() {
             className="justify-content-end align-items-center flex-row "
             style={{ flexBasis: "20%" }}
           >
-            <Link to="/cart">
-              <MDBNavbarLink>
-                <MDBBadge pill color="danger">
-                  0
-                </MDBBadge>
-                <span>
-                  <MDBIcon fas icon="shopping-cart" />
-                </span>
-              </MDBNavbarLink>
-            </Link>
+            {auth()?.role != "shop" ? (
+              <Link to="/cart">
+                <MDBNavbarLink>
+                  <MDBBadge pill color="danger">
+                    {cartItems}
+                  </MDBBadge>
+                  <span>
+                    <MDBIcon fas icon="shopping-cart" />
+                  </span>
+                </MDBNavbarLink>
+              </Link>
+            ) : (
+              ""
+            )}
 
             {!isAuthenticated() ? (
               <MDBDropdown>
@@ -127,19 +135,11 @@ export default function NavBar() {
                   </MDBDropdownItem>
                 </MDBDropdownMenu>
               </MDBDropdown>
-            ) : (
+            ) : auth().role == "user" ? (
               <MDBNavbarItem className="px-3">
                 <MDBDropdown>
                   <MDBDropdownToggle tag="a" className="nav-link" role="button">
-                    <img
-                      src={
-                        auth().role == "user"
-                          ? auth().user.ProfilePhoto
-                          : auth().shop.ProfilePhoto
-                      }
-                      alt=""
-                      width="40px"
-                    />
+                    <img src={auth()?.user.useProfile} alt="" width="40px" />
                   </MDBDropdownToggle>
                   <MDBDropdownMenu>
                     <MDBDropdownItem className="py-2 px-3 ">
@@ -149,6 +149,34 @@ export default function NavBar() {
                     </MDBDropdownItem>
                     <MDBDropdownItem className="py-2 px-3 ">
                       <Link to="/userProfile" className="text-dark">
+                        View Profile
+                      </Link>
+                    </MDBDropdownItem>
+                    <MDBDropdownItem
+                      className="py-2 px-3 text-danger"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        signOut();
+                        logout();
+                        dispatch(emptyCart());
+                        navigate("/", { replace: true });
+                      }}
+                    >
+                      Logout
+                      <MDBIcon fas icon="sign-out-alt" />
+                    </MDBDropdownItem>
+                  </MDBDropdownMenu>
+                </MDBDropdown>
+              </MDBNavbarItem>
+            ) : (
+              <MDBNavbarItem className="px-3">
+                <MDBDropdown>
+                  <MDBDropdownToggle tag="a" className="nav-link" role="button">
+                    <img src={auth()?.shop?.ProfilePhoto} alt="" width="40px" />
+                  </MDBDropdownToggle>
+                  <MDBDropdownMenu>
+                    <MDBDropdownItem className="py-2 px-3 ">
+                      <Link to="/shopOwner" className="text-dark">
                         View Profile
                       </Link>
                     </MDBDropdownItem>

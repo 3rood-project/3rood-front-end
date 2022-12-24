@@ -13,6 +13,7 @@ const config = {
 const initialState = {
   allShops: [],
   shopData: [],
+  shopTags: [],
   isLoading: false,
 };
 
@@ -50,6 +51,11 @@ export const AllShopsReducer = createSlice({
     },
     [fetchShopProfile.fulfilled]: (state, action) => {
       state.shopData = action.payload.data;
+
+      action.payload.data.shop_products.forEach((product) => {
+        state.shopTags.push(product.tag);
+      });
+      state.shopTags = Array.from(new Set(state.shopTags));
       state.isLoading = false;
     },
   },

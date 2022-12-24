@@ -1,8 +1,48 @@
 import React from "react";
 import { MDBBtn, MDBListGroup, MDBListGroupItem } from "mdb-react-ui-kit";
 import { Link } from "react-router-dom";
+import { useAuthUser } from "react-auth-kit";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { fetchShopProfileData } from "../../redusers/ShopProfileReduser";
 
 export default function ApprovedOrder({ offerData }) {
+  const auth = useAuthUser();
+  const dispatch = useDispatch();
+  const handleApproveOrReject = (id, action) => {
+    const data = { change_stage: action };
+    const config = {
+      method: "post",
+      url: `http://127.0.0.1:8000/api/stage/${id}`,
+      headers: {
+        Accept: "application/vnd.api+json",
+        "Content-Type": "application/vnd.api+json",
+        Authorization: `Bearer  ${auth().token}`,
+      },
+      data: data,
+    };
+    axios(config).then((res) => {
+      console.log(res);
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-right",
+        iconColor: "white",
+        customClass: {
+          popup: "colored-toast",
+        },
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+      });
+      Toast.fire({
+        icon: "success",
+        title: res.data.message,
+      });
+      dispatch(fetchShopProfileData(auth().token));
+    });
+  };
+  console.log(offerData.orderStage);
   return (
     <>
       <MDBListGroupItem className="d-flex justify-content-between align-items-center px-2">
@@ -25,16 +65,43 @@ export default function ApprovedOrder({ offerData }) {
             View Details
           </MDBBtn>
         </Link>
-        <div className="d-flex flex-column flex-md-row  justify-content-center ">
-          <MDBBtn size="sm" rounded color="secondary" className="ms-2 mt-2">
-            preparing
-          </MDBBtn>
-          <MDBBtn size="sm" rounded color="warning" className="ms-2 mt-2">
-            ondelivery
-          </MDBBtn>
-          <MDBBtn size="sm" rounded color="success" className="ms-2 mt-2">
-            delivered
-          </MDBBtn>
+        <div>
+          <h6 className="text-center">{offerData.orderStage}</h6>
+          <div className="d-flex flex-column flex-md-row  justify-content-center ">
+            <MDBBtn
+              size="sm"
+              rounded
+              color="secondary"
+              className="ms-2 mt-2"
+              onClick={() => {
+                handleApproveOrReject(offerData.order_id, "preparing");
+              }}
+            >
+              preparing
+            </MDBBtn>
+            <MDBBtn
+              size="sm"
+              rounded
+              color="warning"
+              className="ms-2 mt-2"
+              onClick={() => {
+                handleApproveOrReject(offerData.order_id, "onDelivery");
+              }}
+            >
+              onDelivery
+            </MDBBtn>
+            <MDBBtn
+              size="sm"
+              rounded
+              color="success"
+              className="ms-2 mt-2"
+              onClick={() => {
+                handleApproveOrReject(offerData.order_id, "Delivered");
+              }}
+            >
+              delivered
+            </MDBBtn>
+          </div>
         </div>
       </MDBListGroupItem>
     </>
