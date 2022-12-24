@@ -30,7 +30,7 @@ export function ShopOwner() {
   useEffect(() => {
     dispatch(fetchShopProfileData(auth().token));
   }, []);
-
+  console.log(auth());
   if (shopData.length == 0) {
     return (
       <div

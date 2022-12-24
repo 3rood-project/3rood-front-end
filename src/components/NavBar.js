@@ -22,6 +22,7 @@ import { useIsAuthenticated } from "react-auth-kit";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { emptyCart } from "../redusers/CartReduser";
+import { userLogout } from "../redusers/UserData";
 
 export default function NavBar() {
   const [showBasic, setShowBasic] = useState(false);
@@ -159,6 +160,7 @@ export default function NavBar() {
                         signOut();
                         logout();
                         dispatch(emptyCart());
+                        dispatch(userLogout());
                         navigate("/", { replace: true });
                       }}
                     >

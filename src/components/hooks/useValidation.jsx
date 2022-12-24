@@ -71,18 +71,18 @@ const useValidation = () => {
   };
   ///////////////////////////////////////////
   const NameValidation = (inputName, value) => {
+    if (inputName == "") {
+      setMessage((pervs) => ({
+        ...pervs,
+        [inputName]: "name is required",
+      }));
+      return false;
+    }
     if (!nameRegx.test(value)) {
       setMessage((pervs) => ({
         ...pervs,
         [inputName]:
           "invalid name should include just white space and characters",
-      }));
-      return false;
-    }
-    if (inputName == "") {
-      setMessage((pervs) => ({
-        ...pervs,
-        [inputName]: "name is required",
       }));
       return false;
     }
@@ -92,25 +92,25 @@ const useValidation = () => {
     }));
     return true;
   };
-  const phoneValidation = (phone) => {
+  const phoneValidation = (phone, inputName = "phone_number") => {
     if (phone == "") {
       setMessage((pervs) => ({
         ...pervs,
-        phone_number: `phone number is required`,
+        [inputName]: `phone number is required`,
       }));
       return false;
     }
     if (!phoneRegx.test(phone)) {
       setMessage((pervs) => ({
         ...pervs,
-        phone_number: "phone number should be 10 numbers like 0788887777",
+        [inputName]: "phone number should be 10 numbers like 0788887777",
       }));
       return false;
     }
 
     setMessage((pervs) => ({
       ...pervs,
-      phone_number: "",
+      [inputName]: "",
     }));
     return true;
   };

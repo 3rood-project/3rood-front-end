@@ -33,7 +33,12 @@ export const userDataSlice = createSlice({
     saveOrder: (state, action) => {
       state.userOrder = action.payload;
     },
+    userLogout: (state) => {
+      state.userData = [];
+      state.userOrder = [];
+    },
   },
+
   extraReducers: {
     [fetchUserProfile.pending]: (state) => {
       state.isLoading = true;
@@ -46,6 +51,6 @@ export const userDataSlice = createSlice({
   },
 });
 
-export const { saveData, saveOrder } = userDataSlice.actions;
+export const { saveData, saveOrder, userLogout } = userDataSlice.actions;
 
 export default userDataSlice.reducer;

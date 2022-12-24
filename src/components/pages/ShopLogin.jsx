@@ -18,7 +18,7 @@ function ShopLogin() {
   const [message, setMessage] = useState({ clintError: "", serverError: "" });
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const auth = useAuthUser();
+
   const signIn = useSignIn();
   const navigate = useNavigate();
   const data = new FormData();

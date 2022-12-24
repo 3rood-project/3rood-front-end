@@ -15,9 +15,15 @@ import { useState } from "react";
 import useValidation from "../hooks/useValidation";
 import axios from "axios";
 import { useSignIn } from "react-auth-kit";
+import RegisterGoogle from "../Google/RegisterGoogle";
+import { v4 } from "uuid";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../fierbase";
+
 function Register() {
   const signIn = useSignIn();
   const navigate = useNavigate();
+  const [error, setError] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
     first_name: "",
@@ -29,6 +35,7 @@ function Register() {
     gender: "",
     phone_number: "",
     birthday: "",
+    profile_photo: "",
   });
   const {
     NameValidation,
@@ -60,6 +67,7 @@ function Register() {
     let city = isNotEmptyValidation("city", userInfo.city);
     let gender = isNotEmptyValidation("gender", userInfo.gender);
     let birthday = isNotEmptyValidation("birthday", userInfo.birthday);
+    let profile = isNotEmptyValidation("profilePhoto", userInfo.birthday);
     if (
       fName &&
       lName &&
@@ -68,7 +76,8 @@ function Register() {
       phone &&
       city &&
       gender &&
-      birthday
+      birthday &&
+      profile
     ) {
       return true;
     } else return false;
@@ -83,6 +92,7 @@ function Register() {
     if (checkValidation()) {
       axios(config)
         .then(function (res) {
+          console.log(res.data);
           if (
             signIn({
               token: res.data.token,
@@ -100,11 +110,21 @@ function Register() {
         })
         .catch(function (error) {
           console.log(error);
-          setMessage({
-            email: error.response.data.message,
-          });
+          setError(true);
+          setMessage({ ...message, serverError: error.response.data.message });
         });
     }
+  };
+  const uploadImage = (image) => {
+    if (image == null) return false;
+    const imageRef = ref(storage, `userImage/${image.name + v4()}`);
+    const response = uploadBytes(imageRef, image).then((res) => {
+      console.log(res);
+      getDownloadURL(res.ref).then((response) => {
+        setUserInfo((pervs) => ({ ...pervs, profile_photo: response }));
+      });
+    });
+    return response;
   };
 
   return (
@@ -162,6 +182,16 @@ function Register() {
                     <img src={logo} height="60" alt="" loading="lazy" />
                   </div>
                   <MDBRow className="d-flex justify-content-between">
+                    {error ? (
+                      <div
+                        className="text-danger text-center p-2 mb-2 rounded-5 small"
+                        style={{ backgroundColor: "#f9c7c4" }}
+                      >
+                        {message.serverError}
+                      </div>
+                    ) : (
+                      ""
+                    )}
                     <div className="col-6 ">
                       <p className="text-danger m-0 small">
                         {message.first_name}
@@ -269,6 +299,25 @@ function Register() {
                         onChange={handleOnChange}
                       />
                     </div>
+                    <div className="d-flex align-items-center mb-3">
+                      <div className="col-4">
+                        <img src={userInfo.profile_photo} alt="" width={150} />
+                      </div>
+                      <div className="col-8">
+                        <span>Product photo</span>
+                        <p className="text-danger m-0 small">
+                          {message?.profilePhoto}
+                        </p>
+                        <MDBInput
+                          wrapperClass="mb-4"
+                          type="file"
+                          name="product_image"
+                          onChange={(e) => {
+                            uploadImage(e.target.files[0]);
+                          }}
+                        />
+                      </div>
+                    </div>
                   </MDBRow>
 
                   <MDBBtn className="w-100 mb-2" size="md" color="dark">
@@ -276,16 +325,8 @@ function Register() {
                   </MDBBtn>
 
                   <p className="text-center mb-1">or </p>
-                  <MDBBtn
-                    className="w-100 mb-2"
-                    size="md"
-                    color="dark"
-                    onClick={(e) => {
-                      handleRegister(e);
-                    }}
-                  >
-                    sign up with <MDBIcon fab icon="google" size="lg" />
-                  </MDBBtn>
+
+                  <RegisterGoogle setError={setError} setMessage={setMessage} />
                   <div className="text-center mt-4">
                     do you have account ?<Link to="/login">Login</Link>
                   </div>
