@@ -43,12 +43,7 @@ export function Cart() {
                 </MDBCardHeader>
                 <MDBCardBody>
                   <div className="text-center">
-                    <h3
-                      className="mb-4
-                    "
-                    >
-                      Your Cart is Empty{" "}
-                    </h3>
+                    <h3 className="mb-4">Your Cart is Empty </h3>
                     <Link to="/shops">
                       <MDBBtn color="dark">go to shops</MDBBtn>
                     </Link>

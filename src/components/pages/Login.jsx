@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useSignIn } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
+import LoginGoogle from "../Google/login";
 function Login() {
   const [credential, seCredential] = useState({ email: "", password: "" });
   const [message, setMessage] = useState({ clintError: "", serverError: "" });
@@ -166,9 +167,10 @@ function Login() {
                   </MDBBtn>
                 )}
                 <p className="text-center mb-1">or </p>
-                <MDBBtn className="w-100 mb-2" size="md" color="dark">
+                {/* <MDBBtn className="w-100 mb-2" size="md" color="dark">
                   Login with <MDBIcon fab icon="google" size="lg" />
-                </MDBBtn>
+                </MDBBtn> */}
+                <LoginGoogle setMessage={setMessage} setError={setError} />
                 <div className="text-center mt-4">
                   you don't have account ?<Link to="/register">Register</Link>
                 </div>

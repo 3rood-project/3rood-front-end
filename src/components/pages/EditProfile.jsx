@@ -25,11 +25,6 @@ function EditProfile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userData, isLoading } = useSelector((state) => state.userData);
-  useEffect(() => {
-    if (userData.length === 0) {
-      dispatch(fetchUserProfile(auth().token));
-    }
-  }, []);
   const [userInfo, setUserInfo] = useState({
     first_name: userData.firstName,
     last_name: userData.lastName,
@@ -40,6 +35,36 @@ function EditProfile() {
     birthday: userData.birthday,
     profile_photo: "",
   });
+  useEffect(() => {
+    if (userData.length === 0) {
+      dispatch(fetchUserProfile(auth().token));
+    }
+  }, []);
+  useEffect(() => {
+    setUserInfo({
+      first_name: userData.firstName,
+      last_name: userData.lastName,
+      email: userData.userEmail,
+      city: userData.city,
+      gender: userData.gender,
+      phone_number: userData.phoneNumber,
+      birthday: userData.birthday,
+      profile_photo: "",
+    });
+  }, [userData]);
+
+  useEffect(() => {
+    if (
+      userInfo.city === null ||
+      userInfo.birthday === null ||
+      userInfo.gender === null ||
+      userInfo.phone_number === null
+    ) {
+      setError(true);
+      console.log("error");
+    } else setError(false);
+  }, [userInfo]);
+  const [error, setError] = useState(false);
 
   const config = {
     method: "put",
@@ -55,17 +80,16 @@ function EditProfile() {
     setUserInfo((pervs) => ({ ...pervs, [e.target.name]: e.target.value }));
   };
 
-  const { NameValidation, isNotEmptyValidation, phoneValidation, message } =
-    useValidation();
+  const { isNotEmptyValidation, phoneValidation, message } = useValidation();
 
   const checkValidation = () => {
-    let fname = NameValidation("first_name", userInfo.first_name);
-    let lname = NameValidation("last_name", userInfo.last_name);
+    let fname = isNotEmptyValidation("first_name", userInfo.first_name);
+    let lname = isNotEmptyValidation("last_name", userInfo.last_name);
     let phoneNumber = phoneValidation(userInfo.phone_number);
     let city = isNotEmptyValidation("city", userInfo.city);
     let gender = isNotEmptyValidation("gender", userInfo.gender);
     let birthday = isNotEmptyValidation("birthday", userInfo.birthday);
-    if (fname && lname && phoneNumber && city && gender && birthday)
+    if (fname && lname && phoneNumber && city && gender && birthday && !error)
       return true;
     else return false;
   };
@@ -112,6 +136,16 @@ function EditProfile() {
                   <div className="text-center mb-4">
                     <h3>Edit Profile</h3>
                   </div>{" "}
+                  {error ? (
+                    <div
+                      className="text-danger text-center p-2 mb-4 rounded-5 small"
+                      style={{ backgroundColor: "#f9c7c4" }}
+                    >
+                      please complete your information
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <MDBRow className="d-flex justify-content-between">
                     <div className="col-6 ">
                       <p className="text-danger m-0 small">
@@ -170,7 +204,9 @@ function EditProfile() {
                         type="date"
                         name="birthday"
                         onChange={handleOnChange}
-                        value={userInfo.birthday}
+                        value={
+                          userInfo.birthday === null ? "" : userInfo.birthday
+                        }
                       />
                     </div>
                     <div className="col-6 ">
@@ -194,7 +230,7 @@ function EditProfile() {
                         type="text"
                         name="city"
                         onChange={handleOnChange}
-                        value={userInfo.city}
+                        value={userInfo.city === null ? "" : userInfo.city}
                       />
                     </div>
                     <div className="col-6 ">
@@ -207,7 +243,11 @@ function EditProfile() {
                         type="tel"
                         name="phone_number"
                         onChange={handleOnChange}
-                        value={userInfo.phone_number}
+                        value={
+                          userInfo.phone_number === null
+                            ? ""
+                            : userInfo.phone_number
+                        }
                       />
                     </div>
                   </MDBRow>
