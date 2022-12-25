@@ -21,7 +21,12 @@ export const Shops = ({ shopData }) => {
             rippleTag="div"
             className="bg-image rounded hover-zoom"
           >
-            <MDBCardImage src={shopData.ProfilePhoto} fluid className="w-100" />
+            <MDBCardImage
+              src={shopData.ProfilePhoto}
+              // fluid
+              width={"100%"}
+              height={250}
+            />
             <Link to={`/shopProfile/${shopData.shopName}`}>
               <div class="hover-overlay">
                 <div
@@ -37,8 +42,8 @@ export const Shops = ({ shopData }) => {
               className="text-reset"
             >
               <h4
-                className="card-title mb-3 text-capitalize"
-                style={{ color: " #ed2647", fontWeight: 700 }}
+                className="card-title mb-3 text-capitalize "
+                style={{ color: " #ed2647", fontWeight: 700, maxHeight: 75 }}
               >
                 {shopData.shopName.slice(0, 30)}
               </h4>

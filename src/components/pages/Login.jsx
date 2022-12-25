@@ -10,7 +10,7 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import logo from "../asset/BrandFiles/3rood-low-resolution-logo-color-on-transparent-background.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useSignIn } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,8 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const signIn = useSignIn();
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPath = location.state?.from?.pathname || "/userProfile";
 
   const data = new FormData();
 
@@ -69,7 +71,7 @@ function Login() {
               },
             })
           ) {
-            return navigate("/userProfile");
+            return navigate(redirectPath);
           }
           setLoading(false);
         })

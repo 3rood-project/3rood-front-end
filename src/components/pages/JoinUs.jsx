@@ -256,9 +256,13 @@ function JoinUs() {
                         onChange={handleOnChange}
                       >
                         <option value="">Chose category</option>
-                        <option value="1">Mart</option>
-                        <option value="2">Food</option>
-                        <option value="3">Fashion</option>
+                        {categories?.map((category) => {
+                          return (
+                            <option value={category.Category_id}>
+                              {category.categoryName}
+                            </option>
+                          );
+                        })}
                       </select>
                     </div>
                     <div className="col-6 ">

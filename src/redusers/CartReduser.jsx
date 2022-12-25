@@ -111,8 +111,10 @@ export const CartReducer = createSlice({
     decreesQuantity: (state, action) => {
       state.products.map((product, index) => {
         if (product.product_id == action.payload.product_id) {
-          state.productsForOrder[index].quantity -= 1;
-          return (state.orderInfo.total -= product.productPrice);
+          if (state.productsForOrder[index].quantity !== 1) {
+            state.productsForOrder[index].quantity -= 1;
+            return (state.orderInfo.total -= product.productPrice);
+          }
         }
       });
     },

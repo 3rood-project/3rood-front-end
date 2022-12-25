@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { gapi } from "gapi-script";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { GoogleLogin } from "react-google-login";
 
 import { refreshTokenSetup } from "./refreshToken";
@@ -13,6 +13,8 @@ const clientId =
 function LoginGoogle({ setMessage, setError }) {
   const navigate = useNavigate();
   const signIn = useSignIn();
+  const location = useLocation();
+  const redirectPath = location.state?.from?.pathname || "/userProfile";
 
   useEffect(() => {
     const initClient = () => {
@@ -57,7 +59,7 @@ function LoginGoogle({ setMessage, setError }) {
             },
           })
         ) {
-          return navigate("/userProfile");
+          return navigate(redirectPath);
         }
       })
       .catch((error) => {

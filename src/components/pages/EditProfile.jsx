@@ -15,7 +15,7 @@ import { useState } from "react";
 import axios from "axios";
 import { fetchUserProfile, saveData } from "../../redusers/UserData";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useEffect } from "react";
 const qs = require("qs");
@@ -35,6 +35,9 @@ function EditProfile() {
     birthday: userData.birthday,
     profile_photo: "",
   });
+  const location = useLocation();
+  const redirectPath = location.state?.from?.pathname || "/userProfile";
+
   useEffect(() => {
     if (userData.length === 0) {
       dispatch(fetchUserProfile(auth().token));
@@ -101,7 +104,7 @@ function EditProfile() {
         .then(function (res) {
           if (res.data.data) {
             dispatch(saveData(res.data.data.userInfo));
-            return navigate("/userProfile");
+            return navigate(redirectPath);
           }
         })
         .catch(function (error) {
