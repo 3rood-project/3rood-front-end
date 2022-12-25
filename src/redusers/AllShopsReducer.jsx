@@ -12,6 +12,7 @@ const config = {
 
 const initialState = {
   allShops: [],
+  allShopsForFilter: [],
   shopData: [],
   shopTags: [],
   isLoading: false,
@@ -37,13 +38,30 @@ export const fetchShopProfile = createAsyncThunk(
 export const AllShopsReducer = createSlice({
   name: "shops",
   initialState,
-  reducers: {},
+  reducers: {
+    searchShops: (state, action) => {
+      state.allShopsForFilter = state.allShops.filter((shop) => {
+        return shop.shopName
+          .toLowerCase()
+          .includes(action.payload.toLowerCase());
+      });
+    },
+    filterShopsByCategory: (state, action) => {
+      state.allShopsForFilter = state.allShops.filter((shop) => {
+        return shop.category == action.payload;
+      });
+    },
+    reset: (state) => {
+      state.allShopsForFilter = state.allShops;
+    },
+  },
   extraReducers: {
     [fetchAllShops.pending]: (state) => {
       state.isLoading = true;
     },
     [fetchAllShops.fulfilled]: (state, action) => {
       state.allShops = action.payload.data;
+      state.allShopsForFilter = action.payload.data;
       state.isLoading = false;
     },
     [fetchShopProfile.pending]: (state) => {
@@ -51,7 +69,6 @@ export const AllShopsReducer = createSlice({
     },
     [fetchShopProfile.fulfilled]: (state, action) => {
       state.shopData = action.payload.data;
-
       action.payload.data.shop_products.forEach((product) => {
         state.shopTags.push(product.tag);
       });
@@ -61,6 +78,7 @@ export const AllShopsReducer = createSlice({
   },
 });
 
-// export const {  } = AllShopsReducer.actions;
+export const { searchShops, filterShopsByCategory, reset } =
+  AllShopsReducer.actions;
 
 export default AllShopsReducer.reducer;

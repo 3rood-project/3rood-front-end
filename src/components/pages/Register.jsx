@@ -10,7 +10,7 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import logo from "../asset/BrandFiles/3rood-low-resolution-logo-color-on-transparent-background.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useValidation from "../hooks/useValidation";
 import axios from "axios";
@@ -46,6 +46,8 @@ function Register() {
     message,
     setMessage,
   } = useValidation();
+  const location = useLocation();
+  const redirectPath = location.state?.from?.pathname || "/userProfile";
   const config = {
     method: "post",
     url: "http://127.0.0.1:8000/api/userRegister",
@@ -105,7 +107,7 @@ function Register() {
               },
             })
           ) {
-            return navigate("/userProfile");
+            return navigate(redirectPath);
           }
         })
         .catch(function (error) {

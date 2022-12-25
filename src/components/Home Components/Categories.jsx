@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const Categories = () => {
   return (
     <div
-      className="row mb-3 justify-content-evenly position-relative"
+      className="row mb-3 mx-0 justify-content-evenly position-relative"
       style={{ top: -100 }}
     >
       <div className="col-lg-4 col-md-6 col-6 mb-4 mb-lg-0">

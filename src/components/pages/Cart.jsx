@@ -18,7 +18,7 @@ import {
 } from "mdb-react-ui-kit";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import {
   decreesQuantity,
   increaseQuantity,
@@ -28,6 +28,8 @@ import {
 export function Cart() {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <section className="h-100 gradient-custom">
@@ -195,7 +197,14 @@ export function Cart() {
 
                     <Link to="/checkout">
                       {" "}
-                      <MDBBtn block size="lg" color="dark">
+                      <MDBBtn
+                        block
+                        size="lg"
+                        color="dark"
+                        onClick={() => {
+                          navigate("", { state: location.pathname });
+                        }}
+                      >
                         Go to checkout
                       </MDBBtn>
                     </Link>
