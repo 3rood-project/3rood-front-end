@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 const initialState = {
   shopInfo: { shopId: 0, shopName: "" },
-  orderInfo: { shopId: 0, total: 0 },
+  orderInfo: { shopId: 0, total: 2 },
   productsForOrder: [],
   products: [],
   items: 0,

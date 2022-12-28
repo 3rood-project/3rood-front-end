@@ -9,18 +9,22 @@ import {
   MDBInput,
   MDBSpinner,
 } from "mdb-react-ui-kit";
-import { useAuthUser } from "react-auth-kit";
+import { useAuthUser, useSignIn } from "react-auth-kit";
 import useValidation from "../hooks/useValidation";
 import { useState } from "react";
 import axios from "axios";
 import { fetchUserProfile, saveData } from "../../redusers/UserData";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { v4 } from "uuid";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../fierbase";
 import { useEffect } from "react";
 const qs = require("qs");
 
 function EditProfile() {
+  const signIn = useSignIn();
+
   const auth = useAuthUser();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -103,14 +107,38 @@ function EditProfile() {
       axios(config)
         .then(function (res) {
           if (res.data.data) {
+            if (
+              signIn({
+                token: res.data.token,
+                expiresIn: 1000,
+                tokenType: "Bearer",
+                authState: {
+                  user: res.data.data,
+                  token: auth().token,
+                  role: auth().user.role,
+                },
+              })
+            ) {
+              return navigate(redirectPath);
+            }
             dispatch(saveData(res.data.data.userInfo));
-            return navigate(redirectPath);
           }
         })
         .catch(function (error) {
           console.log(error);
         });
     }
+  };
+  const uploadImage = (image) => {
+    if (image == null) return false;
+    const imageRef = ref(storage, `userImage/${image.name + v4()}`);
+    const response = uploadBytes(imageRef, image).then((res) => {
+      console.log(res);
+      getDownloadURL(res.ref).then((response) => {
+        setUserInfo((pervs) => ({ ...pervs, profile_photo: response }));
+      });
+    });
+    return response;
   };
   if (userData.length === 0) {
     return (
@@ -192,7 +220,7 @@ function EditProfile() {
                           type="file"
                           name="profile_photo"
                           onChange={(e) => {
-                            console.log(e.target.files[0].name.split(".")[1]);
+                            uploadImage(e.target.files[0]);
                           }}
                         />
                       </div>

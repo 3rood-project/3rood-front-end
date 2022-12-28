@@ -101,7 +101,7 @@ function App() {
             </Authorization>
           }
         />
-        {/* ----------user routes-------------- */}
+        {/* --------------user routes---------------- */}
         <Route
           path="/checkout"
           element={
