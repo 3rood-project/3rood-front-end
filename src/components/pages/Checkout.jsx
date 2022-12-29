@@ -79,11 +79,7 @@ export function Checkout() {
     if (checkValidation()) {
       Swal.fire({
         title: "Are you sure?",
-        html: `Your order is <b>${cart.items} items</b> from <b>${
-          cart.shopInfo.shopName
-        }</b> shop and the total price is <b>${
-          cart.orderInfo.total + 2
-        }JD </b>`,
+        html: `Your order is <b>${cart.items} items</b> from <b>${cart.shopInfo.shopName}</b> shop and the total price is <b>${cart.orderInfo.total}JD </b>`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#332d2d",
@@ -114,7 +110,7 @@ export function Checkout() {
             <MDBCard className="mb-4">
               <MDBCardHeader className="py-3">
                 <MDBTypography
-                  tag="h5"
+                  tag="h4"
                   className="mb-0 text-font text-capitalize"
                 >
                   Delivery address
@@ -143,22 +139,29 @@ export function Checkout() {
                     />
                   </MDBCol>
                 </MDBRow>
-                <p className="text-danger m-0 small">{message.city}</p>
-                <MDBInput
-                  label="City"
-                  type="text"
-                  className="mb-4"
-                  name="city"
-                  onChange={handleChange}
-                />
-                <p className="text-danger m-0 small">{message.address}</p>
-                <MDBInput
-                  label="Address"
-                  type="text"
-                  className="mb-4"
-                  name="address"
-                  onChange={handleChange}
-                />
+                <MDBRow>
+                  <MDBCol>
+                    <p className="text-danger m-0 small">{message.city}</p>
+                    <MDBInput
+                      label="City"
+                      type="text"
+                      className="mb-4"
+                      name="city"
+                      onChange={handleChange}
+                    />
+                  </MDBCol>
+                  <MDBCol>
+                    <p className="text-danger m-0 small">{message.address}</p>
+                    <MDBInput
+                      label="Address"
+                      type="text"
+                      className="mb-4"
+                      name="address"
+                      onChange={handleChange}
+                    />
+                  </MDBCol>
+                </MDBRow>
+
                 <MDBTextArea
                   label="Additional information"
                   rows={4}
@@ -172,15 +175,16 @@ export function Checkout() {
               <h3>Payment method</h3>
               <MDBRadio
                 name="flexRadioDefault"
-                id="flexRadioDefault1"
-                label="VISA"
-              />
-              <MDBRadio
-                name="flexRadioDefault"
                 id="flexRadioDefault2"
                 label="Cash on Delivery"
                 required
                 checked
+              />
+              <MDBRadio
+                name="flexRadioDefault"
+                id="flexRadioDefault1"
+                label="VISA"
+                disabled
               />
             </div>
           </MDBCol>
@@ -192,7 +196,7 @@ export function Checkout() {
                   {cart.items} item
                   <Link to={"/cart"}>
                     <span
-                      className="float-end mt-1"
+                      className="float-end mt-1 text-dark"
                       style={{ fontSize: "13px" }}
                     >
                       Edit
@@ -235,7 +239,7 @@ export function Checkout() {
                 <MDBListGroup flush>
                   <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 pb-0 text-muted">
                     Subtotal
-                    <span>{cart.orderInfo.total}JD</span>
+                    <span>{cart.orderInfo.total - 2}JD</span>
                   </MDBListGroupItem>
                   <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 pb-0 text-muted">
                     Delivery
@@ -243,7 +247,7 @@ export function Checkout() {
                   </MDBListGroupItem>
                   <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 fw-bold text-uppercase">
                     Total to pay
-                    <span>{cart.orderInfo.total + 2}JD</span>
+                    <span>{cart.orderInfo.total}JD</span>
                   </MDBListGroupItem>
                 </MDBListGroup>
               </MDBCardFooter>

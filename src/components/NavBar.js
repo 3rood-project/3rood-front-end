@@ -68,20 +68,42 @@ export default function NavBar() {
                 </NavLink>
               </MDBNavbarLink>
             </MDBNavbarItem>
-            <MDBNavbarItem>
-              <MDBNavbarLink>
-                <NavLink to="/shops" className="text-dark">
-                  Shops
-                </NavLink>
-              </MDBNavbarLink>
-            </MDBNavbarItem>
-            <MDBNavbarItem>
-              <MDBNavbarLink>
-                <NavLink to="/joinUs" className="text-dark">
-                  Join Us
-                </NavLink>
-              </MDBNavbarLink>
-            </MDBNavbarItem>
+            {auth()?.role === "shop" ? (
+              ""
+            ) : (
+              <MDBNavbarItem>
+                <MDBNavbarLink>
+                  <NavLink to="/shops" className="text-dark">
+                    Shops
+                  </NavLink>
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+            )}
+            {!isAuthenticated ? (
+              <MDBNavbarItem>
+                <MDBNavbarLink>
+                  <NavLink to="/joinUs" className="text-dark">
+                    Join Us
+                  </NavLink>
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+            ) : auth()?.role === "user" ? (
+              <MDBNavbarItem>
+                <MDBNavbarLink>
+                  <NavLink to="/userProfile" className="text-dark">
+                    Profile
+                  </NavLink>
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+            ) : (
+              <MDBNavbarItem>
+                <MDBNavbarLink>
+                  <NavLink to="/shopOwner" className="text-dark">
+                    Profile
+                  </NavLink>
+                </MDBNavbarLink>
+              </MDBNavbarItem>
+            )}
             <MDBNavbarItem>
               <MDBNavbarLink>
                 <NavLink to="/about" className="text-dark">
