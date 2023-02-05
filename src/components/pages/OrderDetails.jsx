@@ -83,12 +83,13 @@ export default function OrderDetails() {
                     <MDBCardBody>
                       {orderData.orderProducts.map((order) => {
                         return (
-                          <MDBRow>
+                          <MDBRow className="my-2">
                             <MDBCol md="3">
                               <MDBCardImage
                                 src={order.productPhoto}
                                 fluid
-                                alt="Phone"
+                                alt=""
+                                className="rounded-5"
                               />
                             </MDBCol>
                             <MDBCol

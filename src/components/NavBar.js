@@ -61,25 +61,27 @@ export default function NavBar() {
 
         <MDBCollapse navbar show={showBasic}>
           <MDBNavbarNav className="mr-auto mb-2 mb-lg-0 justify-content-center">
-            <MDBNavbarItem>
-              <MDBNavbarLink>
-                <NavLink to="/" className="text-dark">
-                  Home
-                </NavLink>
-              </MDBNavbarLink>
-            </MDBNavbarItem>
             {auth()?.role === "shop" ? (
               ""
             ) : (
-              <MDBNavbarItem>
-                <MDBNavbarLink>
-                  <NavLink to="/shops" className="text-dark">
-                    Shops
-                  </NavLink>
-                </MDBNavbarLink>
-              </MDBNavbarItem>
+              <>
+                <MDBNavbarItem>
+                  <MDBNavbarLink>
+                    <NavLink to="/" className="text-dark">
+                      Home
+                    </NavLink>
+                  </MDBNavbarLink>
+                </MDBNavbarItem>
+                <MDBNavbarItem>
+                  <MDBNavbarLink>
+                    <NavLink to="/shops" className="text-dark">
+                      Shops
+                    </NavLink>
+                  </MDBNavbarLink>
+                </MDBNavbarItem>
+              </>
             )}
-            {!isAuthenticated ? (
+            {!isAuthenticated() ? (
               <MDBNavbarItem>
                 <MDBNavbarLink>
                   <NavLink to="/joinUs" className="text-dark">
@@ -162,7 +164,13 @@ export default function NavBar() {
               <MDBNavbarItem className="px-3">
                 <MDBDropdown>
                   <MDBDropdownToggle tag="a" className="nav-link" role="button">
-                    <img src={auth()?.user.useProfile} alt="" width="40px" />
+                    <img
+                      src={auth()?.user.useProfile}
+                      alt=""
+                      width="40px"
+                      height={40}
+                      className="rounded-5"
+                    />
                   </MDBDropdownToggle>
                   <MDBDropdownMenu>
                     <MDBDropdownItem className="py-2 px-3 ">
@@ -196,7 +204,12 @@ export default function NavBar() {
               <MDBNavbarItem className="px-3">
                 <MDBDropdown>
                   <MDBDropdownToggle tag="a" className="nav-link" role="button">
-                    <img src={auth()?.shop?.ProfilePhoto} alt="" width="40px" />
+                    <img
+                      src={auth()?.shop?.ProfilePhoto}
+                      alt=""
+                      width="40px"
+                      height={40}
+                    />
                   </MDBDropdownToggle>
                   <MDBDropdownMenu>
                     <MDBDropdownItem className="py-2 px-3 ">

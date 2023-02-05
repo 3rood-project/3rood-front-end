@@ -55,7 +55,7 @@ export default function UserProfile() {
                   src={userData.useProfile}
                   alt="avatar"
                   className="rounded-circle mb-3"
-                  style={{ width: "200px" }}
+                  style={{ width: "250px", height: 250 }}
                   fluid
                 />
                 <p className="h4 mb-3" style={{ color: " #ed2647" }}>

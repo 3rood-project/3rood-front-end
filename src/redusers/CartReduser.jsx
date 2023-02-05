@@ -32,7 +32,8 @@ export const CartReducer = createSlice({
     addToCart: (state, action) => {
       if (state.orderInfo.shopId == action.payload.shopData.shop_id) {
         //add product price to total order price
-        state.orderInfo.total += action.payload.productData.productPrice;
+        state.orderInfo.total =
+          state.orderInfo.total + action.payload.productData.productPrice;
         //save product Data to display it in cart and checkout pages
         state.products.push(action.payload.productData);
         state.productsForOrder.push({

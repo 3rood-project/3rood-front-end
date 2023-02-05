@@ -36,16 +36,24 @@ export default function Footer() {
 
               <ul className="list-unstyled mb-0">
                 <li>
-                  <Link className="text-white">Shops</Link>
+                  <Link className="text-white" to={"/shops"}>
+                    Shops
+                  </Link>
                 </li>
                 <li>
-                  <Link className="text-white">About</Link>
+                  <Link className="text-white" to="/about">
+                    About
+                  </Link>
                 </li>
                 <li>
-                  <Link className="text-white">Join us</Link>
+                  <Link className="text-white" to={"/joinUs"}>
+                    Join us
+                  </Link>
                 </li>
                 <li>
-                  <Link className="text-white">Contact</Link>
+                  <Link className="text-white" to={"/contact"}>
+                    Contact
+                  </Link>
                 </li>
               </ul>
             </MDBCol>

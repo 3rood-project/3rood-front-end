@@ -97,6 +97,21 @@ export function Checkout() {
             })
             .catch(function (error) {
               console.log(error);
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-right",
+                iconColor: "white",
+                customClass: {
+                  popup: "colored-toast",
+                },
+                showConfirmButton: false,
+                timer: 1500,
+                timerProgressBar: true,
+              });
+              Toast.fire({
+                icon: "error",
+                title: error.response.data.message,
+              });
             });
         }
       });
@@ -239,7 +254,7 @@ export function Checkout() {
                 <MDBListGroup flush>
                   <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 pb-0 text-muted">
                     Subtotal
-                    <span>{cart.orderInfo.total - 2}JD</span>
+                    <span>{(cart.orderInfo.total - 2).toFixed(2)}JD</span>
                   </MDBListGroupItem>
                   <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 pb-0 text-muted">
                     Delivery
@@ -247,7 +262,7 @@ export function Checkout() {
                   </MDBListGroupItem>
                   <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 fw-bold text-uppercase">
                     Total to pay
-                    <span>{cart.orderInfo.total}JD</span>
+                    <span>{cart.orderInfo.total.toFixed(2)}JD</span>
                   </MDBListGroupItem>
                 </MDBListGroup>
               </MDBCardFooter>

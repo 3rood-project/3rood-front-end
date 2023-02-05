@@ -60,7 +60,8 @@ function OfferForShop({ offerData }) {
         <MDBCardImage
           src={offerData.productPhoto}
           position="top"
-          alt="Laptop"
+          alt=""
+          height={200}
         />
         <MDBCardBody>
           <div className="d-flex justify-content-between">

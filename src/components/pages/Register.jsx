@@ -47,7 +47,8 @@ function Register() {
     setMessage,
   } = useValidation();
   const location = useLocation();
-  const redirectPath = location.state?.from?.pathname || "/userProfile";
+  const redirectPath = location.state || "/userProfile";
+  console.log(location);
   const config = {
     method: "post",
     url: "http://127.0.0.1:8000/api/userRegister",

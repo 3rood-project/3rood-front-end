@@ -29,10 +29,12 @@ export default function Zigzag() {
               <MDBCardText>
                 <div className="mb-4 ">
                   <p className="mb-3 lh-lg">
-                    Lorem Ipsum dolor sit amet, consectetur adipsicing kengan
-                    omeg kohm tokito Professional charity theme based Sed leo
-                    nisl, posuere at molestie ac, suscipit auctor mauris. Etiam
-                    quis metus
+                    Joining our website can help small businesses expand their
+                    reach, connect with new customers and grow revenue. Our
+                    website offers a customizable business listing, powerful
+                    search engine, various marketing tools and resources, and a
+                    supportive community of other small business owners. Join
+                    our website today to take your business to the next level.
                   </p>
                   <Link to="/joinUs">
                     <MDBBtn className="mx-2" color="dark">
@@ -53,10 +55,13 @@ export default function Zigzag() {
               <MDBCardText>
                 <div className="mb-4 ">
                   <p className="mb-3 lh-lg">
-                    Lorem Ipsum dolor sit amet, consectetur adipsicing kengan
-                    omeg kohm tokito Professional charity theme based Sed leo
-                    nisl, posuere at molestie ac, suscipit auctor mauris. Etiam
-                    quis metus
+                    Our website is a great platform for individuals looking to
+                    sell items online, reach a wider audience and have access to
+                    various tools and resources. By joining our website, you
+                    will gain access to a user-friendly platform, marketing
+                    tools, powerful search engine, and secure payment and
+                    shipping options to ensure a smooth transaction. Join us
+                    today and start selling your items online.
                   </p>
                   <Link to="/joinUs">
                     <MDBBtn className="mx-2" color="dark">

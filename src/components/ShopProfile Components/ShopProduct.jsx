@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, switchShop } from "../../redusers/CartReduser";
 import Swal from "sweetalert2";
 
-function ShopProduct({ productData, shopData }) {
+function ShopProduct({ productData, shopData, isOpen }) {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
 
@@ -45,6 +45,7 @@ function ShopProduct({ productData, shopData }) {
           src={productData.productPhoto}
           position="top"
           alt="Laptop"
+          height={200}
         />
         <MDBCardBody>
           <div className="d-flex justify-content-between">
@@ -61,14 +62,23 @@ function ShopProduct({ productData, shopData }) {
           </div>
 
           <div class="d-flex justify-content-center mb-2">
-            <MDBBtn
-              outline
-              className="mx-2"
-              color="dark"
-              onClick={handleAddToCart}
-            >
-              Add To Cart
-            </MDBBtn>
+            {isOpen && productData?.productQuantity != 0 ? (
+              <MDBBtn
+                outline
+                className="mx-2"
+                color="dark"
+                onClick={handleAddToCart}
+              >
+                Add To Cart
+              </MDBBtn>
+            ) : productData?.productQuantity == 0 ? (
+              <>
+                {" "}
+                <h4 className="text-danger"> Sold Out </h4>
+              </>
+            ) : (
+              ""
+            )}
           </div>
         </MDBCardBody>
       </MDBCard>

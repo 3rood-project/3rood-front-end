@@ -25,6 +25,13 @@ export function ShopProfile() {
   useEffect(() => {
     dispatch(fetchShopProfile(shopName));
   }, []);
+  const isOpen =
+    shopData.length != 0
+      ? Number(shopData.shop_info.openTime.slice(0, 2)) <=
+          new Date().getHours() &&
+        new Date().getHours() <=
+          Number(shopData.shop_info.closeTime.slice(0, 2))
+      : "";
 
   if (shopData.length === 0) {
     return (
@@ -57,7 +64,7 @@ export function ShopProfile() {
                     alt="Generic placeholder image"
                     className="mt-2 mt-md-5 mb-2 img-thumbnail "
                     fluid
-                    style={{ width: "300px", zIndex: "1" }}
+                    style={{ height: 200, zIndex: "1" }}
                   />
                 </div>
                 <div className="ms-4 mt-md-5" style={{ marginsTop: "90px" }}>
@@ -81,9 +88,7 @@ export function ShopProfile() {
                     </MDBCardText>
                   </div>
                   <div>
-                    {Number(shopData.shop_info.openTime.slice(0, 2)) <
-                    new Date().getHours() <
-                    Number(shopData.shop_info.closeTime.slice(0, 2)) ? (
+                    {isOpen ? (
                       <MDBCardText className="mb-1 h5 text-success">
                         Open
                       </MDBCardText>
@@ -116,6 +121,7 @@ export function ShopProfile() {
                           shopName: shopData.shop_info.shopName,
                         }}
                         key={product.productName}
+                        isOpen={isOpen}
                       />
                     ) : (
                       ""

@@ -179,18 +179,18 @@ export function Cart() {
                     <MDBListGroup flush>
                       <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                         Sub Total
-                        <span>{cart.orderInfo.total - 2}JD</span>
+                        <span>{(cart.orderInfo.total - 2).toFixed(2)}JD</span>
                       </MDBListGroupItem>
                       <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0">
                         Delivery
-                        <span> 2JD</span>
+                        <span> 2.00JD</span>
                       </MDBListGroupItem>
                       <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                         <div>
                           <strong>Total amount</strong>
                         </div>
                         <span>
-                          <strong>{cart.orderInfo.total}JD</strong>
+                          <strong>{cart.orderInfo.total.toFixed(2)}JD</strong>
                         </span>
                       </MDBListGroupItem>
                     </MDBListGroup>

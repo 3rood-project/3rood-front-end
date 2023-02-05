@@ -16,29 +16,40 @@ import {
   searchShops,
 } from "../../redusers/AllShopsReducer";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 export const SideBar = () => {
   const dispatch = useDispatch();
-  const { allShopsForFilter, isLoading } = useSelector((state) => state.shops);
+  const { allShopsForFilter, allShops, isLoading } = useSelector(
+    (state) => state.shops
+  );
   const [categories, setCategories] = useState([]);
+  const [searchParams] = useSearchParams();
+  const URLParamCategory = searchParams.get("category");
 
   useEffect(() => {
-    if (allShopsForFilter.length === 0) {
+    if (allShops.length === 0) {
       dispatch(fetchAllShops());
     }
     dispatch(reset());
-  }, []);
-  useEffect(() => {
+
     axios
       .get("http://127.0.0.1:8000/api/allCategory")
       .then((res) => setCategories(res.data.data))
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    if (URLParamCategory != null) {
+      dispatch(filterShopsByCategory(URLParamCategory));
+    }
+  }, [allShops]);
+
   if (isLoading) {
     return (
       <div
         className="d-flex justify-content-center align-items-center"
-        style={{ height: "50vh" }}
+        style={{ height: "60vh" }}
       >
         <MDBSpinner role="status " style={{ width: "3rem", height: "3rem" }}>
           <span className="visually-hidden">Loading...</span>
@@ -48,7 +59,10 @@ export const SideBar = () => {
   }
   return (
     <>
-      <MDBRow className="g-0 justify-content-between align-items-start">
+      <MDBRow
+        className="g-0 justify-content-between align-items-start"
+        style={{ minHeight: "70vh" }}
+      >
         <MDBCol className="col-4 col-md-2 mt-5">
           <div className="d-flex mb-3 mx-md-3">
             <MDBInput
@@ -94,6 +108,9 @@ export const SideBar = () => {
                       filterShopsByCategory(e.target.labels[0].innerHTML)
                     );
                   }}
+                  defaultChecked={
+                    URLParamCategory == category.categoryName ? true : false
+                  }
                 />
               );
             })}

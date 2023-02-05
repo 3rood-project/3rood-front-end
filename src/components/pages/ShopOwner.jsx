@@ -30,7 +30,12 @@ export function ShopOwner() {
   useEffect(() => {
     dispatch(fetchShopProfileData(auth().token));
   }, []);
-  console.log(auth());
+  const isOpen =
+    shopData.length != 0
+      ? Number(shopData.openTime.slice(0, 2)) < new Date().getHours() &&
+        new Date().getHours() < Number(shopData.closeTime.slice(0, 2))
+      : "";
+
   if (shopData.length == 0) {
     return (
       <div
@@ -96,9 +101,15 @@ export function ShopOwner() {
                     </MDBCardText>
                   </div>
                   <div>
-                    <MDBCardText className="mb-1 h5 text-success">
-                      Open
-                    </MDBCardText>
+                    {isOpen ? (
+                      <MDBCardText className="mb-1 h5 text-success">
+                        Open
+                      </MDBCardText>
+                    ) : (
+                      <MDBCardText className="mb-1 h5 text-danger">
+                        Close
+                      </MDBCardText>
+                    )}
                     <MDBCardText className="small text-muted mb-0">
                       {shopData.openTime.slice(0, 5)} -{" "}
                       {shopData.closeTime.slice(0, 5)}

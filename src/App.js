@@ -42,7 +42,14 @@ function App() {
       <NavBar />
       <Routes>
         {/* ----------public routes----------- */}
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <Authorization deny={"shop"}>
+              <Home />
+            </Authorization>
+          }
+        />
         <Route
           path="/login"
           element={

@@ -19,7 +19,11 @@ const Authorization = ({ permissions, children, deny, forAuth = true }) => {
   if (deny !== undefined) {
     // this flag to redirect user who has specific role sent with (deny property)
     return auth()?.role == deny ? (
-      <Navigate to="/" state={{ path: location.pathname }} replace />
+      <Navigate
+        to={auth()?.role === "shop" ? "/shopOwner" : "/userProfile"}
+        state={{ path: location.pathname }}
+        replace
+      />
     ) : (
       children
     );

@@ -7,7 +7,6 @@ import {
   MDBCard,
   MDBCardBody,
   MDBInput,
-  MDBIcon,
 } from "mdb-react-ui-kit";
 import logo from "../asset/BrandFiles/3rood-low-resolution-logo-color-on-transparent-background.png";
 import { Link, useLocation } from "react-router-dom";
@@ -24,6 +23,7 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const redirectPath = location.state?.from?.pathname || "/userProfile";
+  console.log(location);
 
   const data = new FormData();
 
@@ -112,7 +112,7 @@ function Login() {
           ></div>
         </div>
         <MDBRow className="justify-content-end me-md-4">
-          <MDBCol md="4">
+          <MDBCol lg="4">
             <MDBCard className="my-5">
               <MDBCardBody className="p-5">
                 <div className="text-center mb-3">
@@ -174,7 +174,16 @@ function Login() {
                 </MDBBtn> */}
                 <LoginGoogle setMessage={setMessage} setError={setError} />
                 <div className="text-center mt-4">
-                  you don't have account ?<Link to="/register">Register</Link>
+                  you don't have account ?
+                  <p
+                    className="d-inline-block text-secondary"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigate("/register", { state: redirectPath });
+                    }}
+                  >
+                    Register
+                  </p>
                 </div>
               </MDBCardBody>
             </MDBCard>
